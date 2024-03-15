@@ -1,16 +1,19 @@
-### Hi there 👋
 
-<!--
-**RubenMRDev/RubenMRDev** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
+<h3 align="center">Hey there! I'm Ruben</h3>
+<p align="center">「 I am a future full stack developer form <strong>Spain</strong> 」</p>
 
-Here are some ideas to get you started:
+<a href="https://es.linkedin.com/in/rub%C3%A9n-mart%C3%ADn-ruiz-985397252?trk=people-guest_people_search-card"><img src="https://img.shields.io/badge/linkedin-%230077B5.svg?style=for-the-badge&logo=linkedin&logoColor=white"></a>
 
-- 🔭 I’m currently working on ...
-- 🌱 I’m currently learning ...
-- 👯 I’m looking to collaborate on ...
-- 🤔 I’m looking for help with ...
-- 💬 Ask me about ...
-- 📫 How to reach me: ...
-- 😄 Pronouns: ...
-- ⚡ Fun fact: ...
--->
+
+<h1 align="left">About me:</h1>
+<p align="left">
+🤙🏼  Enjoy to do programing and help help others
+  
+😊  Like to do code and learn new techniques
+
+<h3 align="left">Use to code:</h3>
+
+![HTML5](https://img.shields.io/badge/html5-%23E34F26.svg?style=for-the-badge&logo=html5&logoColor=white)
+![Java](https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=openjdk&logoColor=white)
+![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E)
+![CSS3](https://img.shields.io/badge/css3-%231572B6.svg?style=for-the-badge&logo=css3&logoColor=white)
