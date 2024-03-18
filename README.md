@@ -7,7 +7,7 @@
 
 <h1 align="left">About me:</h1>
 <p align="left">
-🤙🏼  Enjoy to do programing and help help others
+🤙🏼  Enjoy to do programing and help others
   
 😊  Like to do code and learn new techniques
 
