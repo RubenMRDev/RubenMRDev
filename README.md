@@ -1,6 +1,5 @@
 
-<h3 align="center">Hey there! I'm Ruben</h3>
-<p align="center">「 I am a future full stack developer form <strong>Spain</strong> 」</p>
+![Header](./github-header-image.png)
 
 <a href="https://es.linkedin.com/in/rub%C3%A9n-mart%C3%ADn-ruiz-985397252?trk=people-guest_people_search-card"><img src="https://img.shields.io/badge/linkedin-%230077B5.svg?style=for-the-badge&logo=linkedin&logoColor=white"></a>
 
