@@ -17,7 +17,6 @@
 ![SQLite](https://img.shields.io/badge/sqlite-%2307405e.svg?style=for-the-badge&logo=sqlite&logoColor=white)
 ![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)
 
-[![My GitHub stats](https://github-readme-stats.vercel.app/api?username=harry-graham&hide=stars&count_private=true&show_icons=true)](https://github.com/anuraghazra/github-readme-stats)
 
 ### Contact me
 <a href="https://es.linkedin.com/in/rub%C3%A9n-mart%C3%ADn-ruiz-985397252?trk=people-guest_people_search-card"><img src="https://img.shields.io/badge/linkedin-%230077B5.svg?style=for-the-badge&logo=linkedin&logoColor=white"></a>
