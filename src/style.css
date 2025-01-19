@@ -1,12 +1,15 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap');
+
 *{
     overflow-x: hidden;
+    font-family: "Montserrat", serif;
 }
 
 .main{
     height: 100vh;
 
 }
-.mainContent h1, .mainContent h3{
+.mainContent h1, h3{
     overflow: hidden; 
 }
 .mainContent{
