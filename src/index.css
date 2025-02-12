@@ -1,0 +1,20 @@
+@import "tailwindcss";
+
+
+body {
+  font-family: "Poppins", serif;
+  font-weight: 200;
+  font-style: normal;
+}
+
+.c-bold-text {
+  font-weight: 800;
+}
+
+.c-mid-bold-text {
+  font-weight: 500;
+}
+
+button {
+  font-weight: 400;
+}
