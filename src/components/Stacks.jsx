@@ -4,26 +4,26 @@ const stacks = {
   frontend: {
     title: "Front-End",
     images: [
-      "src/assets/stacks/html5.webp",
-      "src/assets/stacks/css3.webp",
-      "src/assets/stacks/javascript.webp",
-      "src/assets/stacks/react.webp",
-      "src/assets/stacks/bootstrap.webp",
-      "src/assets/stacks/tailwind.webp",
+      "images/stacks/html5.webp",
+      "images/stacks/css3.webp",
+      "images/stacks/javascript.webp",
+      "images/stacks/react.webp",
+      "images/stacks/bootstrap.webp",
+      "images/stacks/tailwind.webp",
     ],
   },
   backend: {
     title: "Back-End",
     images: [
-      "src/assets/stacks/java.webp",
-      "src/assets/stacks/php.webp",
-      "src/assets/stacks/laravel.webp",
+      "images/stacks/java.webp",
+      "images/stacks/php.webp",
+      "images/stacks/laravel.webp",
     ],
   },
   database: {
     title: "Databases",
     images: [
-      "src/assets/stacks/mysql.webp",
+      "images/stacks/mysql.webp",
     ],
   },
 };

@@ -4,7 +4,7 @@ const Hero = () => {
     return (
         <div className="mt-20">
             <div className="bg-gradient-to-br from-[#8000FF] to-[#FF002D] rounded-full p-1 h-40 w-40 mx-auto">
-                <img className="rounded-full h-full w-full" src="src/assets/profile.webp" alt="" />
+                <img className="rounded-full h-full w-full" src="images/profile.webp" alt="" />
             </div>
             <p className="text-center text-white mt-4 text-4xl font">
                 <span className="block c-bold-text">Hey! I'm <span className="bg-gradient-to-br from-[#8000FF] to-[#FF002D] text-transparent bg-clip-text">Ruben</span></span>

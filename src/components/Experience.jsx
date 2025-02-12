@@ -10,7 +10,7 @@ const Experience = () => {
       <div className="flex flex-col md:flex-row items-start md:items-center justify-between  p-6 rounded-lg ">
         <div className="flex items-center gap-4">
           <img
-            src="src/assets/experience/sevimanager.webp"
+            src="images/experience/sevimanager.webp"
             alt="Sevimanager Logo"
             className="h-12 w-12 rounded-full"
           />

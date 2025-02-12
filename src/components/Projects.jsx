@@ -4,16 +4,16 @@ const projects = [
   {
     title: "Wheel Of Doom",
     description: "Only One Escapes is a dynamic web-based project inspired by the Wheel of Doom concept. Players' fates are decided through dice rolls, and the participant with the highest score wins the combat.",
-    image: "src/assets/projects/onlyoneescapes.webp",
-    previewLink: "https://example.com/preview1",
-    githubLink: "https://github.com/example/repo1",
+    image: "images/projects/onlyoneescapes.webp",
+    previewLink: "https://only-one-escapes-project.vercel.app/",
+    githubLink: "https://github.com/RubenMRDev/OnlyOneEscapes",
   },
   {
     title: "MHA Wiki",
     description: "MHA Wiki is a web page that displays informational cards about characters from the anime My Hero Academia. The page uses Bootstrap for the card designs and retrieves character data from a JSON file, offering a visually appealing and accessible interface.",
-    image: "src/assets/projects/mhawiki.webp",
-    previewLink: "https://example.com/preview2",
-    githubLink: "https://github.com/example/repo2",
+    image: "images/projects/mhawiki.webp",
+    previewLink: "https://mha-wiki.vercel.app/",
+    githubLink: "https://github.com/RubenMRDev/MHAWiki",
   },
   // Añade más proyectos según sea necesario
 ];
