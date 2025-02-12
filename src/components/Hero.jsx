@@ -22,7 +22,7 @@ const Hero = () => {
                 <button onClick={() => window.location.href = "#contact-me"} className="border border-white px-4 py-2 rounded-full hover:bg-white hover:text-black transition-all duration-300 ease-in-out">
                     Get In Touch
                 </button>
-                <button onClick={() => window.open("src/assets/rubenMartinRuizCV.pdf", "_blank")} className="border border-white bg-white text-black px-4 py-2 rounded-full hover:bg-transparent hover:text-white transition-all duration-300 ease-in-out">
+                <button onClick={() => window.open("rubenMartinRuizCV.pdf", "_blank")} className="border border-white bg-white text-black px-4 py-2 rounded-full hover:bg-transparent hover:text-white transition-all duration-300 ease-in-out">
                     Download CV
                 </button>
             </div>
