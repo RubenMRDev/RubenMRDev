@@ -10,7 +10,6 @@ const ContactMe = () => {
         If you have any questions or inquiries, please feel free to contact me through the following channels:
       </p>
       <div className="flex justify-center space-x-6">
-        {/* LinkedIn */}
         <a
           href="https://www.linkedin.com/in/rub%C3%A9n-mart%C3%ADn-ruiz-985397252/"
           target="_blank"
@@ -26,7 +25,6 @@ const ContactMe = () => {
             <path d="M19 0h-14c-2.76 0-5 2.24-5 5v14c0 2.76 2.24 5 5 5h14c2.76 0 5-2.24 5-5v-14c0-2.76-2.24-5-5-5zm-11 19h-3v-10h3v10zm-1.5-11.2c-.97 0-1.75-.79-1.75-1.76s.78-1.75 1.75-1.75 1.75.79 1.75 1.75-.78 1.76-1.75 1.76zm13.5 11.2h-3v-5.5c0-1.32-.02-3.03-1.84-3.03-1.84 0-2.12 1.44-2.12 2.93v5.6h-3v-10h2.88v1.36h.04c.4-.76 1.38-1.56 2.84-1.56 3.04 0 3.6 2 3.6 4.59v5.61z" />
           </svg>
         </a>
-        {/* GitHub */}
         <a
           href="https://github.com/RubenMRDev"
           target="_blank"

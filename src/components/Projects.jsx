@@ -15,12 +15,11 @@ const projects = [
     previewLink: "https://mha-wiki.vercel.app/",
     githubLink: "https://github.com/RubenMRDev/MHAWiki",
   },
-  // Añade más proyectos según sea necesario
 ];
 
 const Projects = () => {
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-30">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-30" id="projects">
       <h2 className="text-transparent text-center font-bold text-2xl mb-8 bg-gradient-to-br from-orange-400 to-orange-600 bg-clip-text">
         Projects
       </h2>

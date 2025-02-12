@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
 const stacks = {
   frontend: {
@@ -24,6 +24,8 @@ const stacks = {
     title: "Databases",
     images: [
       "images/stacks/mysql.webp",
+      "images/stacks/mongoDB.webp",
+      "images/stacks/sqlite.webp",
     ],
   },
 };
@@ -31,48 +33,40 @@ const stacks = {
 const Experience = () => {
   const [currentStack, setCurrentStack] = useState("frontend");
 
-  useEffect(() => {
+  const nextStack = () => {
     const stackKeys = Object.keys(stacks);
-    let index = 0;
+    let index = (stackKeys.indexOf(currentStack) + 1) % stackKeys.length;
+    setCurrentStack(stackKeys[index]);
+  };
 
-    const interval = setInterval(() => {
-      index = (index + 1) % stackKeys.length;
-      setCurrentStack(stackKeys[index]);
-    }, 3000); // Cambia cada 3 segundos
-
-    return () => clearInterval(interval);
-  }, []);
+  const prevStack = () => {
+    const stackKeys = Object.keys(stacks);
+    let index = (stackKeys.indexOf(currentStack) - 1 + stackKeys.length) % stackKeys.length;
+    setCurrentStack(stackKeys[index]);
+  };
 
   return (
     <div className="flex flex-col items-center justify-center mt-30">
-     <p
-  className="text-transparent text-center font-bold text-2xl mb-4 bg-gradient-to-br from-[#888888] to-[#AAAAAA] bg-clip-text"
->
-  Stacks
-</p>
+      <p className="text-transparent text-center font-bold text-2xl mb-4 bg-gradient-to-br from-[#888888] to-[#AAAAAA] bg-clip-text">
+        Stacks
+      </p>
 
       <div className="relative w-64 h-52 flex items-center justify-center">
         {Object.entries(stacks).map(([key, stack]) => (
           <div
             key={key}
-            className={`absolute flex flex-col items-center justify-center transition-opacity duration-1000 ${
-              key === currentStack ? "opacity-100" : "opacity-0"
+            className={`absolute flex flex-col items-center justify-center transition-opacity duration-700 ${
+              key === currentStack
+                ? "opacity-100"
+                : "opacity-0" 
             }`}
-            style={{ minHeight: "130px" }} // Mantiene la altura fija
+            style={{ minHeight: "130px" }}
           >
-            <p className="text-[#C5C5C5] text-center mb-4 text-2xl">
-              {stack.title}
-            </p>
+            <p className="text-[#C5C5C5] text-center mb-4 text-2xl">{stack.title}</p>
             <div className="grid grid-cols-3 gap-2 w-full justify-items-center">
               {stack.images.map((src, idx) => (
-                <img
-                  key={idx}
-                  src={src}
-                  alt={stack.title}
-                  className="w-16 h-16 object-contain"
-                />
+                <img key={idx} src={src} alt={stack.title} className="w-16 h-16 object-contain" />
               ))}
-              {/* Rellenar con imágenes vacías si hay menos de 6 */}
               {stack.images.length < 6 &&
                 Array(6 - stack.images.length)
                   .fill("")
@@ -80,6 +74,19 @@ const Experience = () => {
             </div>
           </div>
         ))}
+
+        <div
+          className="absolute left-[-50px] top-1/2 transform -translate-y-1/2 p-3 cursor-pointer z-10"
+          onClick={prevStack}
+        >
+          <span className="text-[#C5C5C5]" style={{ fontSize: "40px", fontWeight: "bold" }}>&lt;</span>
+        </div>
+        <div
+          className="absolute right-[-50px] top-1/2 transform -translate-y-1/2 p-3 cursor-pointer z-10"
+          onClick={nextStack}
+        >
+          <span className="text-[#C5C5C5]" style={{ fontSize: "40px", fontWeight: "bold" }}>&gt;</span>
+        </div>
       </div>
     </div>
   );
