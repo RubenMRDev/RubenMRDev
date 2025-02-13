@@ -1,4 +1,5 @@
 import './App.css'
+import React , { useState } from 'react'
 import Stacks from './components/Stacks'
 import Header from './components/Header'
 import Hero from './components/Hero'
@@ -9,14 +10,20 @@ import Experience from './components/Experience'
 
 function App() {
 
+  const [language, setLanguage] = useState("en");
+
+  const toggleLanguage = () => {
+    setLanguage(language === "en" ? "es" : "en");
+  };
+
   return (
     <>
-      <Header />
-      <Hero />
+      <Header language={language} toggleLanguage={toggleLanguage} />
+      <Hero language={language} />
       <Stacks />
-      <Experience />
-      <Projects />
-      <ContactMe />
+      <Experience language={language}/>
+      <Projects language={language}/>
+      <ContactMe language={language}/>
       <Footer />
     </>
   )

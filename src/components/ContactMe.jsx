@@ -1,13 +1,13 @@
 import React from "react";
 
-const ContactMe = () => {
+const ContactMe = ({ language }) => {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-30 bg-[#1A1A1A] rounded-lg shadow-lg p-8" id="contact-me">
       <h2 className="text-transparent text-center font-bold text-2xl mb-6 bg-gradient-to-br from-[#8000FF] to-[#FF002D] bg-clip-text">
-        Contact Me
+        {language === 'en' ? 'Contact Me' : 'Contáctame'}
       </h2>
       <p className="text-[#C5C5C5] mb-6 text-center">
-        If you have any questions or inquiries, please feel free to contact me through the following channels:
+        {language === 'en' ? 'If you have any questions or inquiries, please feel free to contact me through the following channels:' : 'Si tienes alguna pregunta o consulta, no dudes en contactarme a través de los siguientes canales:'}
       </p>
       <div className="flex justify-center space-x-6">
         <a
@@ -46,4 +46,3 @@ const ContactMe = () => {
 };
 
 export default ContactMe;
-

@@ -1,12 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 
-const Header = () => {
+const Header = ({ toggleLanguage, language }) => {
 
   const smoothScrollTo = (targetY, duration = 600) => {
     const startY = window.scrollY;
     const distance = targetY - startY;
     let startTime = null;
-
 
     const easeInOutQuad = (t) =>
       t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
@@ -25,9 +24,8 @@ const Header = () => {
     requestAnimationFrame(animation);
   };
 
-
   const handleScroll = (event, targetId) => {
-    event.preventDefault(); 
+    event.preventDefault();
     const element = document.getElementById(targetId);
     if (element) {
       const offset = 50;
@@ -48,15 +46,16 @@ const Header = () => {
   };
 
   return (
-    <header className="bg-[#222222] text-white flex items-center justify-center p-4">
-      <ul className="flex items-center justify-center space-x-6">
+    <header className="bg-[#222222] text-white flex items-center justify-between p-4">
+      {/* Menu central */}
+      <ul className="flex items-center justify-center space-x-6 flex-grow">
         <li>
           <a
             href="#"
             onClick={handleHomeScroll}
             className="inline-block hover:bg-gradient-to-br hover:from-[#8000FF] hover:to-[#FF002D] hover:text-transparent hover:bg-clip-text"
           >
-            Home
+            {language === 'en' ? 'Home' : 'Inicio'}
           </a>
         </li>
         <li>
@@ -65,7 +64,7 @@ const Header = () => {
             onClick={(e) => handleScroll(e, "projects")}
             className="inline-block hover:bg-gradient-to-br hover:from-[#8000FF] hover:to-[#FF002D] hover:text-transparent hover:bg-clip-text"
           >
-            Projects
+            {language === 'en' ? 'Projects' : 'Proyectos'}
           </a>
         </li>
         <li>
@@ -74,7 +73,7 @@ const Header = () => {
             onClick={(e) => handleScroll(e, "experience")}
             className="inline-block hover:bg-gradient-to-br hover:from-[#8000FF] hover:to-[#FF002D] hover:text-transparent hover:bg-clip-text"
           >
-            Experience
+            {language === 'en' ? 'Experience' : 'Experiencia'}
           </a>
         </li>
         <li>
@@ -83,10 +82,18 @@ const Header = () => {
             onClick={(e) => handleScroll(e, "contact-me")}
             className="inline-block hover:bg-gradient-to-br hover:from-[#8000FF] hover:to-[#FF002D] hover:text-transparent hover:bg-clip-text"
           >
-            Contact
+            {language === 'en' ? 'Contact' : 'Contacto'}
           </a>
         </li>
       </ul>
+
+      {/* Botón de cambio de idioma */}
+      <button
+        onClick={toggleLanguage}
+        className="text-white text-xs px-3 py-1 rounded-full hover:bg-gradient-to-br hover:from-[#8000FF] hover:to-[#FF002D] hover:text-transparent hover:bg-clip-text md:text-sm"
+      >
+        {language === 'en' ? 'ES' : 'EN'}
+      </button>
     </header>
   );
 };
