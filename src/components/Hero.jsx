@@ -83,7 +83,7 @@ const Hero = ({ language }) => {
           onClick={() => (window.location.href = "#contact-me")}
           className="border border-white px-4 py-2 rounded-full hover:bg-white hover:text-black transition-all duration-300 ease-in-out"
         >
-          {language === 'en' ? 'Get In Touch' : 'Contacta conmigo'}
+          {language === 'en' ? 'Get In Touch' : 'Contactame'}
         </button>
         <button
           onClick={() => window.open("rubenMartinRuizCV.pdf", "_blank")}

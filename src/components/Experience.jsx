@@ -15,7 +15,7 @@ const Experience = ({ language }) => {
             className="h-12 w-12 rounded-full"
           />
           <h3 className="text-lg font-semibold text-[#C5C5C5]">
-            {language === 'en' ? 'Intern Sevimanager' : 'Practicante en Sevimanager'}
+            {language === 'en' ? 'Intern Sevimanager' : 'Practicas en Sevimanager'}
           </h3>
         </div>
 
