@@ -1,5 +1,6 @@
-import { Mail, Volume2, VolumeX } from "lucide-react";
+import { Settings, Volume2, VolumeX } from "lucide-react";
 import { useEffect, useState } from "react";
+import { SettingsModal } from "./SettingsModal";
 
 interface WiiBottomBarProps {
   isMuted?: boolean;
@@ -20,6 +21,7 @@ const playSelectSound = () => {
 
 export const WiiBottomBar = ({ isMuted = false, onToggleMute }: WiiBottomBarProps) => {
   const [currentTime, setCurrentTime] = useState(new Date());
+  const [showSettings, setShowSettings] = useState(false);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -133,16 +135,22 @@ export const WiiBottomBar = ({ isMuted = false, onToggleMute }: WiiBottomBarProp
                 <Volume2 className="w-5 h-5 md:w-9 md:h-9 text-foreground/70" />
               )}
             </button>
-            <div 
+            <button 
               className="w-10 h-10 md:w-20 md:h-20 rounded-full bg-card border-2 md:border-4 border-bottom-bar-border flex items-center justify-center shadow-lg transition-transform duration-200 hover:scale-110"
               onMouseEnter={playHoverSound}
-              onClick={playSelectSound}
+              onClick={() => {
+                playSelectSound();
+                setShowSettings(true);
+              }}
             >
-              <Mail className="w-5 h-5 md:w-9 md:h-9 text-foreground/70" />
-            </div>
+              <Settings className="w-5 h-5 md:w-9 md:h-9 text-foreground/70" />
+            </button>
           </div>
         </div>
       </div>
+
+      {/* Settings Modal */}
+      <SettingsModal isOpen={showSettings} onClose={() => setShowSettings(false)} />
     </div>
   );
 };

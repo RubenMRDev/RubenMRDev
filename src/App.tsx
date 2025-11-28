@@ -7,6 +7,7 @@ import { useEffect, useState, createContext, useContext } from "react";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import { HealthSafetyScreen } from "./components/HealthSafetyScreen";
+import { LanguageProvider } from "./lib/i18n";
 
 const queryClient = new QueryClient();
 
@@ -82,23 +83,25 @@ const App = () => {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <AudioContext.Provider value={{ isMuted, toggleMute }}>
-        <TooltipProvider>
-          <CustomCursor />
-          {showHealthScreen && (
-            <HealthSafetyScreen onContinue={handleContinue} />
-          )}
-          <Toaster />
-          <Sonner />
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </BrowserRouter>
-      </TooltipProvider>
-      </AudioContext.Provider>
+      <LanguageProvider>
+        <AudioContext.Provider value={{ isMuted, toggleMute }}>
+          <TooltipProvider>
+            <CustomCursor />
+            {showHealthScreen && (
+              <HealthSafetyScreen onContinue={handleContinue} />
+            )}
+            <Toaster />
+            <Sonner />
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<Index />} />
+              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </BrowserRouter>
+        </TooltipProvider>
+        </AudioContext.Provider>
+      </LanguageProvider>
     </QueryClientProvider>
   );
 };

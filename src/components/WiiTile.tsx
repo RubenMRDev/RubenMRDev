@@ -5,21 +5,16 @@ interface WiiTileProps {
   label?: string;
   image?: string;
   isProject?: boolean;
+  tileId?: "aboutMe" | "skills";
   onClick?: () => void;
 }
 
-const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
-  "Skills": Code,
-  "Proyectos": Briefcase,
-  "Contacto": Mail,
-};
-
 const imageMap: Record<string, string> = {
-  "Sobre Mí": "/aboutme.webp",
-  "Skills": "/skills.webp",
+  "aboutMe": "/aboutme.webp",
+  "skills": "/skills.webp",
 };
 
-export const WiiTile = ({ type, label, image, isProject, onClick }: WiiTileProps) => {
+export const WiiTile = ({ type, label, image, isProject, tileId, onClick }: WiiTileProps) => {
   const isEmpty = type === "empty";
 
   const playHoverSound = () => {
@@ -50,8 +45,7 @@ export const WiiTile = ({ type, label, image, isProject, onClick }: WiiTileProps
     }
   };
 
-  const IconComponent = label ? iconMap[label] : null;
-  const tileImage = isProject ? image : (label ? imageMap[label] : null);
+  const tileImage = isProject ? image : (tileId ? imageMap[tileId] : null);
 
   return (
     <div
@@ -105,11 +99,6 @@ export const WiiTile = ({ type, label, image, isProject, onClick }: WiiTileProps
         </div>
       ) : (
         <>
-          {IconComponent && (
-            <div className="w-16 h-16 rounded-full bg-[#5ac8fa] flex items-center justify-center mb-3">
-              <IconComponent className="w-8 h-8 text-white" />
-            </div>
-          )}
           {label && (
             <div className="text-lg font-semibold text-center text-gray-600">
               {label}

@@ -3,6 +3,7 @@ import { WiiTile } from "./WiiTile";
 import { WiiBottomBar } from "./WiiBottomBar";
 import { ProgramModal } from "./ProgramModal";
 import { useAudio } from "@/App";
+import { useLanguage } from "@/lib/i18n";
 
 interface ProjectData {
   name: string;
@@ -20,6 +21,7 @@ interface TileData {
   image?: string;
   isProject?: boolean;
   projectData?: ProjectData;
+  tileId?: "aboutMe" | "skills";
 }
 
 // ============================================
@@ -27,24 +29,39 @@ interface TileData {
 // ============================================
 // Cada proyecto aparecerá como un "juego" en el menú de la Wii
 // - image: Pon la imagen en /public/projects/ (como carátula del juego)
-// - Las primeras 3 tiles son las secciones del portfolio
-// - Los proyectos empiezan desde la tile 4
+// - Las primeras 2 tiles son las secciones del portfolio
+// - Los proyectos empiezan desde la tile 3
 
-const tiles: TileData[] = [
+interface TileConfig {
+  id: number;
+  type: "empty" | "blue" | "green" | "white";
+  labelKey?: "aboutMe" | "skills";
+  image?: string;
+  isProject?: boolean;
+  projectKey?: "onlyOneEscapes" | "hotelJohnnieWalker" | "chordia";
+  projectData?: {
+    name: string;
+    technologies: string[];
+    image?: string;
+    liveUrl?: string;
+    githubUrl?: string;
+  };
+}
+
+const tilesConfig: TileConfig[] = [
   // Secciones principales del portfolio
-  { id: 1, type: "white", label: "Sobre Mí" },
-  { id: 2, type: "white", label: "Skills" },
+  { id: 1, type: "white", labelKey: "aboutMe" },
+  { id: 2, type: "white", labelKey: "skills" },
   
   // 🎮 PROYECTOS - Agrega tus proyectos aquí como "juegos"
   { 
     id: 3, 
     type: "white", 
-    label: "Only One Escapes",
     image: "/projects/onlyoneescapestitle.png",
     isProject: true,
+    projectKey: "onlyOneEscapes",
     projectData: {
       name: "Only One Escapes",
-      description: "Only One Escapes is a dynamic web-based project inspired by the Wheel of Doom concept. Players' fates are decided through dice rolls, and the participant with the highest score wins the combat.",
       technologies: ["React", "Tailwind"],
       image: "/projects/onlyoneescapestitle.png",
       liveUrl: "https://only-one-escapes-project.vercel.app/",
@@ -54,12 +71,11 @@ const tiles: TileData[] = [
   { 
     id: 4, 
     type: "white", 
-    label: "Hotel Johnnie Walker",
     image: "/projects/hoteljohnniewalker.png",
     isProject: true,
+    projectKey: "hotelJohnnieWalker",
     projectData: {
       name: "Hotel Johnnie Walker",
-      description: "Hotel Johnnie Walker is a fully front-end project that showcases a hotel booking system with a seamless and user-friendly interface. The application allows users to make reservations for hotel rooms as well as book tables at the hotel's restaurant.",
       technologies: ["React", "Tailwind", "JSON"],
       image: "/projects/hoteljohnniewalker.png",
       liveUrl: "https://hoteljohnniewalker.vercel.app/",
@@ -69,12 +85,11 @@ const tiles: TileData[] = [
   { 
     id: 5, 
     type: "white", 
-    label: "Chordia",
     image: "/projects/chordia.png",
     isProject: true,
+    projectKey: "chordia",
     projectData: {
       name: "Chordia",
-      description: "Chordia is a chord progression management platform. Create, explore, and manage your musical ideas with our intuitive interface, designed for musicians of all levels.",
       technologies: ["React", "Tailwind", "AI"],
       image: "/projects/chordia.png",
       liveUrl: "https://chordiamusic.vercel.app/",
@@ -93,13 +108,35 @@ const tiles: TileData[] = [
 ];
 
 // Solo mostrar 10 tiles en móvil
-const mobileTiles = tiles.slice(0, 10);
+const getMobileTiles = (tiles: TileData[]) => tiles.slice(0, 10);
 
 export const WiiMenu = () => {
   const { isMuted, toggleMute } = useAudio();
+  const { t } = useLanguage();
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedProgram, setSelectedProgram] = useState<string>("");
   const [selectedProject, setSelectedProject] = useState<ProjectData | null>(null);
+
+  // Convertir tilesConfig a tiles con traducciones
+  const tiles: TileData[] = tilesConfig.map(tile => {
+    // Si es un proyecto, añadir la descripción traducida
+    let projectData: ProjectData | undefined;
+    if (tile.isProject && tile.projectData && tile.projectKey) {
+      projectData = {
+        ...tile.projectData,
+        description: t.projects[tile.projectKey].description,
+      };
+    }
+
+    return {
+      ...tile,
+      label: tile.labelKey ? t[tile.labelKey] : tile.projectData?.name,
+      tileId: tile.labelKey,
+      projectData,
+    };
+  });
+
+  const mobileTiles = getMobileTiles(tiles);
 
   const handleTileClick = (tile: TileData) => {
     if (tile.type !== "empty") {
@@ -127,6 +164,7 @@ export const WiiMenu = () => {
               label={tile.label}
               image={tile.image}
               isProject={tile.isProject}
+              tileId={tile.tileId}
               onClick={() => handleTileClick(tile)}
             />
           ))}
@@ -140,6 +178,7 @@ export const WiiMenu = () => {
               label={tile.label}
               image={tile.image}
               isProject={tile.isProject}
+              tileId={tile.tileId}
               onClick={() => handleTileClick(tile)}
             />
           ))}

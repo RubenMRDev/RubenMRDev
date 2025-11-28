@@ -3,6 +3,7 @@ import { Code, User, Mail, ExternalLink, Github, Play, Info, X } from "lucide-re
 import { FaReact, FaNodeJs, FaGitAlt, FaCss3Alt, FaHtml5, FaJs, FaLaravel, FaPhp, FaDocker, FaFigma } from "react-icons/fa";
 import { SiTypescript, SiTailwindcss, SiMysql, SiPostman } from "react-icons/si";
 import { VscVscode } from "react-icons/vsc";
+import { useLanguage } from "@/lib/i18n";
 
 interface ProjectData {
   name: string;
@@ -20,21 +21,25 @@ interface ProgramModalProps {
   projectData?: ProjectData | null;
 }
 
-const sections = [
-  { id: "about", title: "Sobre Mí", icon: User },
-  { id: "skills", title: "Mis Skills", icon: Code },
-];
-
-const sectionMap: Record<string, number> = {
-  "Sobre Mí": 0,
-  "Skills": 1,
-};
-
 export const ProgramModal = ({ isOpen, onClose, programId, projectData }: ProgramModalProps) => {
+  const { t } = useLanguage();
+  
+  const sections = [
+    { id: "about", title: t.aboutMe, icon: User },
+    { id: "skills", title: t.mySkills, icon: Code },
+  ];
+
+  const sectionMap: Record<string, number> = {
+    [t.aboutMe]: 0,
+    [t.skills]: 1,
+  };
+
   const [isAnimating, setIsAnimating] = useState(false);
   const [currentSection, setCurrentSection] = useState(0);
-  const [slideDirection, setSlideDirection] = useState<"exit-left" | "exit-right" | "enter-left" | "enter-right" | null>(null);
+  const [slideDirection, setSlideDirection] = useState<"left" | "right" | null>(null);
   const [isSliding, setIsSliding] = useState(false);
+  const [animationPhase, setAnimationPhase] = useState<"idle" | "exiting" | "entering">("idle");
+  const [enterFrom, setEnterFrom] = useState<"left" | "right" | null>(null);
 
   useEffect(() => {
     if (isOpen && programId) {
@@ -63,14 +68,25 @@ export const ProgramModal = ({ isOpen, onClose, programId, projectData }: Progra
     audio.volume = 1;
     audio.play();
     setIsSliding(true);
-    setSlideDirection("exit-left");
+    setSlideDirection("right");
+    setAnimationPhase("exiting");
+    
     setTimeout(() => {
       setCurrentSection((prev) => (prev + 1) % sections.length);
-      setSlideDirection("enter-left");
-      setTimeout(() => {
-        setSlideDirection(null);
-        setIsSliding(false);
-      }, 300);
+      setEnterFrom("right");
+      setAnimationPhase("entering");
+      
+      // Pequeño delay para que el navegador registre la posición inicial
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          setAnimationPhase("idle");
+          setTimeout(() => {
+            setSlideDirection(null);
+            setEnterFrom(null);
+            setIsSliding(false);
+          }, 300);
+        });
+      });
     }, 300);
   };
 
@@ -80,14 +96,25 @@ export const ProgramModal = ({ isOpen, onClose, programId, projectData }: Progra
     audio.volume = 1;
     audio.play();
     setIsSliding(true);
-    setSlideDirection("exit-right");
+    setSlideDirection("left");
+    setAnimationPhase("exiting");
+    
     setTimeout(() => {
       setCurrentSection((prev) => (prev - 1 + sections.length) % sections.length);
-      setSlideDirection("enter-right");
-      setTimeout(() => {
-        setSlideDirection(null);
-        setIsSliding(false);
-      }, 300);
+      setEnterFrom("left");
+      setAnimationPhase("entering");
+      
+      // Pequeño delay para que el navegador registre la posición inicial
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          setAnimationPhase("idle");
+          setTimeout(() => {
+            setSlideDirection(null);
+            setEnterFrom(null);
+            setIsSliding(false);
+          }, 300);
+        });
+      });
     }, 300);
   };
 
@@ -156,21 +183,24 @@ export const ProgramModal = ({ isOpen, onClose, programId, projectData }: Progra
             </div>
 
             {/* Section content */}
-            <div className={`px-2 md:px-20 h-full transition-all duration-300 ${
-              slideDirection === "exit-left" ? "translate-x-[-100%] opacity-0" : 
-              slideDirection === "exit-right" ? "translate-x-[100%] opacity-0" : 
-              slideDirection === "enter-left" ? "translate-x-0 opacity-100" :
-              slideDirection === "enter-right" ? "translate-x-0 opacity-100" :
-              "translate-x-0 opacity-100"
-            }`}
-            style={{
-              transform: slideDirection === "exit-left" ? "translateX(-100%)" :
-                         slideDirection === "exit-right" ? "translateX(100%)" :
-                         slideDirection === "enter-left" ? "translateX(0)" :
-                         slideDirection === "enter-right" ? "translateX(0)" : "translateX(0)"
-            }}>
-              {currentSection === 0 && <AboutSection />}
-              {currentSection === 1 && <SkillsSection />}
+            <div 
+              className="px-2 md:px-20 h-full overflow-hidden"
+            >
+              <div
+                className="h-full"
+                style={{
+                  transform: animationPhase === "exiting"
+                    ? (slideDirection === "right" ? "translateX(-100%)" : "translateX(100%)")
+                    : animationPhase === "entering"
+                    ? (enterFrom === "right" ? "translateX(100%)" : "translateX(-100%)")
+                    : "translateX(0)",
+                  opacity: animationPhase === "exiting" ? 0 : animationPhase === "entering" ? 0 : 1,
+                  transition: animationPhase === "entering" ? "none" : "transform 0.3s ease-out, opacity 0.3s ease-out"
+                }}
+              >
+                {currentSection === 0 && <AboutSection />}
+                {currentSection === 1 && <SkillsSection />}
+              </div>
             </div>
           </div>
         </div>
@@ -181,7 +211,7 @@ export const ProgramModal = ({ isOpen, onClose, programId, projectData }: Progra
             onClick={handleClose}
             className="px-8 py-3 md:px-16 md:py-5 bg-gradient-to-b from-gray-100 to-gray-300 rounded-full text-lg md:text-2xl font-semibold text-gray-600 shadow-lg hover:scale-105 transition-transform border-2 border-gray-400"
           >
-            Wii Menu
+            {t.wiiMenu}
           </button>
         </div>
       </div>
@@ -190,68 +220,54 @@ export const ProgramModal = ({ isOpen, onClose, programId, projectData }: Progra
 };
 
 // Sección Sobre Mí
-const AboutSection = () => (
-  <div className="h-full flex items-center justify-center overflow-y-auto">
-    {/* Layout móvil: vertical */}
-    <div className="flex flex-col items-center gap-4 md:hidden px-4 py-2">
-      <img 
-        src="/PROFILE.webp" 
-        alt="Profile" 
-        className="w-40 h-40 object-cover rounded-lg shadow-lg"
-      />
-      <div className="flex-1">
-        <p className="text-sm text-gray-600 leading-relaxed mb-2">
-          I'm a Web Developer with a passion for building clean, efficient, and scalable code. I thrive on solving complex problems, learning new technologies, and collaborating with teams to create awesome digital experiences.
-        </p>
-        <p className="text-sm text-gray-600 leading-relaxed mb-4">
-          I'm open to new opportunities! Whether it's a full-time role, freelance work, or an exciting project, I'm looking for a place where I can contribute my skills in React and Laravel and grow as a developer.
-        </p>
-        <div className="flex justify-start">
-          <a 
-            href="/resume.pdf"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-block px-4 py-2 border-2 border-gray-600 text-sm font-semibold text-gray-600 hover:bg-gray-600 hover:text-white transition-colors"
-          >
-            View Resume
-          </a>
+const AboutSection = () => {
+  const { t } = useLanguage();
+  
+  return (
+    <div className="h-full flex items-center justify-center overflow-y-auto">
+      {/* Layout móvil: vertical */}
+      <div className="flex flex-col items-center gap-4 md:hidden px-4 py-2">
+        <img 
+          src="/PROFILE.webp" 
+          alt="Profile" 
+          className="w-40 h-40 object-cover rounded-lg shadow-lg"
+        />
+        <div className="flex-1">
+          <p className="text-sm text-gray-600 leading-relaxed mb-2">
+            {t.aboutText1}
+          </p>
+          <p className="text-sm text-gray-600 leading-relaxed">
+            {t.aboutText2}
+          </p>
+        </div>
+      </div>
+      {/* Layout desktop: horizontal */}
+      <div className="hidden md:flex items-center gap-20 max-w-5xl">
+        <img 
+          src="/PROFILE.webp" 
+          alt="Profile" 
+          className="w-64 h-64 object-cover rounded-lg shadow-lg"
+        />
+        <div className="flex-1">
+          <p className="text-xl text-gray-600 leading-relaxed mb-4">
+            {t.aboutText1}
+          </p>
+          <p className="text-xl text-gray-600 leading-relaxed">
+            {t.aboutText2}
+          </p>
         </div>
       </div>
     </div>
-    {/* Layout desktop: horizontal */}
-    <div className="hidden md:flex items-center gap-20 max-w-5xl">
-      <img 
-        src="/PROFILE.webp" 
-        alt="Profile" 
-        className="w-64 h-64 object-cover rounded-lg shadow-lg"
-      />
-      <div className="flex-1">
-        <p className="text-xl text-gray-600 leading-relaxed mb-4">
-          I'm a Web Developer with a passion for building clean, efficient, and scalable code. I thrive on solving complex problems, learning new technologies, and collaborating with teams to create awesome digital experiences.
-        </p>
-        <p className="text-xl text-gray-600 leading-relaxed mb-6">
-          I'm open to new opportunities! Whether it's a full-time role, freelance work, or an exciting project, I'm looking for a place where I can contribute my skills in React and Laravel and grow as a developer.
-        </p>
-        <div className="flex justify-end">
-          <a 
-            href="/resume.pdf"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-block px-6 py-3 border-2 border-gray-600 text-xl font-semibold text-gray-600 hover:bg-gray-600 hover:text-white transition-colors"
-          >
-            View Resume
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-);
+  );
+};
 
 // Sección Skills
 const SkillsSection = () => {
+  const { t } = useLanguage();
+  
   const categories = [
     {
-      title: "Front End",
+      title: t.frontEnd,
       skills: [
         { name: "React", icon: FaReact, color: "#61DAFB" },
         { name: "TypeScript", icon: SiTypescript, color: "#3178C6" },
@@ -261,7 +277,7 @@ const SkillsSection = () => {
       ]
     },
     {
-      title: "Back End", 
+      title: t.backEnd, 
       skills: [
         { name: "Laravel", icon: FaLaravel, color: "#FF2D20" },
         { name: "Node.js", icon: FaNodeJs, color: "#339933" },
@@ -271,7 +287,7 @@ const SkillsSection = () => {
       ]
     },
     {
-      title: "Tools",
+      title: t.tools,
       skills: [
         { name: "Git", icon: FaGitAlt, color: "#F05032" },
         { name: "VS Code", icon: VscVscode, color: "#007ACC" },
@@ -324,6 +340,7 @@ const ProjectModal = ({
   handleClose: () => void;
 }) => {
   const [showInfo, setShowInfo] = useState(false);
+  const { t } = useLanguage();
 
   const playSelectSound = () => {
     const audio = new Audio('/select.mp3');
@@ -461,7 +478,7 @@ const ProjectModal = ({
               onClick={playSelectSound}
               className="px-6 py-2 md:px-12 md:py-5 bg-gradient-to-b from-gray-100 to-gray-300 rounded-full text-base md:text-2xl font-semibold text-gray-600 shadow-lg hover:scale-105 transition-transform border-2 border-gray-400"
             >
-              Start
+              {t.start}
             </a>
           )}
           
@@ -469,7 +486,7 @@ const ProjectModal = ({
             onClick={handleClose}
             className="px-6 py-2 md:px-12 md:py-5 bg-gradient-to-b from-gray-100 to-gray-300 rounded-full text-base md:text-2xl font-semibold text-gray-600 shadow-lg hover:scale-105 transition-transform border-2 border-gray-400"
           >
-            Wii Menu
+            {t.wiiMenu}
           </button>
           
           {projectData.githubUrl && (
@@ -480,7 +497,7 @@ const ProjectModal = ({
               onClick={playSelectSound}
               className="px-6 py-2 md:px-12 md:py-5 bg-gradient-to-b from-gray-100 to-gray-300 rounded-full text-base md:text-2xl font-semibold text-gray-600 shadow-lg hover:scale-105 transition-transform border-2 border-gray-400"
             >
-              Repo
+              {t.repo}
             </a>
           )}
         </div>

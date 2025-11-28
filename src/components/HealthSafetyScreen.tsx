@@ -1,6 +1,7 @@
 import { useState, useRef } from "react";
 import { AlertTriangle } from "lucide-react";
 import { PiHandTap } from "react-icons/pi";
+import { useLanguage } from "@/lib/i18n";
 
 interface HealthSafetyScreenProps {
   onContinue: (bgMusic: HTMLAudioElement) => void;
@@ -9,6 +10,7 @@ interface HealthSafetyScreenProps {
 export const HealthSafetyScreen = ({ onContinue }: HealthSafetyScreenProps) => {
   const [isExiting, setIsExiting] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const { t } = useLanguage();
 
   const handleClick = () => {
     if (isExiting) return;
@@ -40,22 +42,16 @@ export const HealthSafetyScreen = ({ onContinue }: HealthSafetyScreenProps) => {
       <div className="flex flex-col items-center mb-8">
         <div className="flex items-center gap-2">
           <AlertTriangle className="w-6 h-6 md:w-8 md:h-8 text-white flex-shrink-0" />
-          <span className="text-xl md:text-2xl font-bold tracking-wide">WARNING-HEALTH AND</span>
+          <span className="text-xl md:text-2xl font-bold tracking-wide">{t.warningTitle1}</span>
         </div>
-        <span className="text-xl md:text-2xl font-bold tracking-wide">SAFETY</span>
+        <span className="text-xl md:text-2xl font-bold tracking-wide">{t.warningTitle2}</span>
       </div>
 
       {/* Main Text */}
-      <div className="text-center mb-8 text-sm leading-relaxed">
-        <p className="mb-1">BEFORE PLAYING, READ YOUR OPERATIONS</p>
-        <p className="mb-1">MANUAL FOR IMPORTANT INFORMATION</p>
-        <p>ABOUT YOUR HEALTH AND SAFETY.</p>
-      </div>
-
-      {/* Also Online */}
-      <div className="text-center mb-12 text-sm">
-        <p className="mb-1">Also online at</p>
-        <p>www.rubenmoreno.dev/</p>
+      <div className="text-center mb-12 text-sm leading-relaxed">
+        <p className="mb-1">{t.beforePlaying1}</p>
+        <p className="mb-1">{t.beforePlaying2}</p>
+        <p>{t.beforePlaying3}</p>
       </div>
 
       {/* Press to Continue */}
@@ -66,8 +62,8 @@ export const HealthSafetyScreen = ({ onContinue }: HealthSafetyScreenProps) => {
           className="hidden md:block w-8 h-8 object-contain"
         />
         <PiHandTap className="md:hidden w-8 h-8 text-white" />
-        <span className="hidden md:inline">Haz click para continuar.</span>
-        <span className="md:hidden">Toca la pantalla para continuar.</span>
+        <span className="hidden md:inline">{t.clickToContinue}</span>
+        <span className="md:hidden">{t.tapToContinue}</span>
       </div>
     </div>
   );
