@@ -1,0 +1,70 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    --background: 210 15% 94%;
+    --foreground: 210 10% 25%;
+
+    --card: 0 0% 98%;
+    --card-foreground: 210 10% 25%;
+
+    --tile-empty: 210 8% 90%;
+    --tile-border: 210 8% 72%;
+    
+    --wii-blue: 205 100% 50%;
+    --wii-blue-dark: 205 100% 35%;
+    --wii-green: 120 60% 40%;
+    --wii-green-dark: 120 60% 30%;
+
+    --primary: 205 100% 50%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 210 10% 88%;
+    --secondary-foreground: 210 10% 25%;
+
+    --muted: 210 10% 88%;
+    --muted-foreground: 210 10% 50%;
+
+    --accent: 205 100% 50%;
+    --accent-foreground: 0 0% 100%;
+
+    --border: 210 10% 75%;
+    --input: 210 10% 75%;
+    --ring: 205 100% 50%;
+
+    --radius: 0.75rem;
+    --tile-radius: 1.5rem;
+
+    --bottom-bar: 210 15% 88%;
+    --bottom-bar-border: 195 85% 65%;
+  }
+  
+  body {
+    @apply bg-background text-foreground;
+    background-image: 
+      repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        hsl(210 15% 92%) 2px,
+        hsl(210 15% 92%) 4px
+      );
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+}
+
+/* Hide default cursor and use custom Wii hand cursor */
+* {
+  cursor: none !important;
+}
