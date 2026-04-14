@@ -14,13 +14,13 @@ export const experience: ExperienceEntry[] = [
     },
     description: {
       en: [
-        'Developing web applications using React, Codeigniter, and React Native',
+        'Developing web applications using React and React Native',
         'Building backend APIs with PHP and CodeIgniter',
         'Collaborating with cross-functional teams to deliver features on time',
         'Implementing responsive designs and optimizing application performance',
       ],
       es: [
-        'Desarrollando aplicaciones web utilizando React, Codeigniter y React Native',
+        'Desarrollando aplicaciones web utilizando React y React Native',
         'Construcción de APIs backend con PHP y CodeIgniter',
         'Participación en equipos multidisciplinares para entregar funcionalidades a tiempo',
         'Implementación de diseños responsive y optimización del rendimiento',
