@@ -49,10 +49,10 @@ export default function Hero() {
       ref={containerRef}
       className="relative flex h-screen items-center justify-center overflow-hidden"
     >
-      {/* Ambient background glow */}
+      {/* Ambient background glow — reduced size & blur on mobile for GPU performance */}
       <div className="pointer-events-none absolute inset-0">
-        <div className="absolute left-1/2 top-1/3 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-neon/5 blur-[120px]" />
-        <div className="absolute bottom-1/4 right-1/4 h-[300px] w-[300px] rounded-full bg-neon-dark/8 blur-[100px]" />
+        <div className="absolute left-1/2 top-1/3 h-[250px] w-[250px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-neon/5 blur-[60px] md:h-[500px] md:w-[500px] md:blur-[120px]" />
+        <div className="absolute bottom-1/4 right-1/4 h-[150px] w-[150px] rounded-full bg-neon-dark/8 blur-[50px] md:h-[300px] md:w-[300px] md:blur-[100px]" />
       </div>
 
       <div ref={containerRef} className="relative z-10 mx-auto max-w-5xl px-6 text-center">
