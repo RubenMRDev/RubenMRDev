@@ -71,15 +71,6 @@
 | **Only One Escapes** | Wheel-of-doom web game with animations, story and sound effects. | JavaScript · Bootstrap · SweetAlert | [Code](https://github.com/RubenMRDev/OnlyOneEscapes) · [Demo](https://only-one-escapes-project.vercel.app/) |
 | **My Hero Academia Wiki** | Interactive wiki for My Hero Academia characters and gallery. | HTML · CSS · Bootstrap · JS | [Code](https://github.com/RubenMRDev/MHAWiki) · [Demo](https://mha-wiki.vercel.app/) |
 
----
-
-### 💼 Experience
-
-- **Fullstack Developer** @ Renterus — *Jul 2025 · Present* — React, React Native & PHP/CodeIgniter APIs.
-- **Frontend Developer Intern** @ Doblerc Studios — *Mar 2024 · Jun 2024* — WordPress UI & custom themes.
-- **Technician in Microcomputer Systems & Networks** @ SeviManager — *Mar 2022 · Jun 2023*.
-
----
 
 <p align="center">
   <img src="https://komarev.com/ghpvc/?username=RubenMRDev&style=for-the-badge&color=7AA2F7&label=Profile+Views" alt="Profile views" />
