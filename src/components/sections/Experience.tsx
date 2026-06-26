@@ -51,7 +51,7 @@ export default function Experience() {
 
           {/* Entries */}
           <div className="space-y-8 sm:space-y-12">
-            {experience.map((entry, i) => (
+            {[...experience].reverse().map((entry, i) => (
               <motion.div
                 key={entry.id}
                 className={`relative flex flex-col md:flex-row ${
