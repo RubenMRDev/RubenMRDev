@@ -1,7 +1,14 @@
 {
-  "name": "temp-scaffold",
+  "name": "ruben-mr-dev",
   "private": true,
   "version": "0.0.0",
+  "description": "Personal portfolio of Rubén Martín Ruiz, fullstack developer.",
+  "author": "Rubén Martín Ruiz <rubenmrdev@gmail.com>",
+  "homepage": "https://ruben-mr-dev.vercel.app",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/RubenMRDev/RubenMRDev.git"
+  },
   "type": "module",
   "scripts": {
     "dev": "vite",
