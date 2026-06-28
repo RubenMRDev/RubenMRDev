@@ -53,6 +53,6 @@ export const en: Translations = {
   },
   footer: {
     rights: 'All rights reserved.',
-    builtWith: 'Built with React, Three.js & Framer Motion',
+    builtWith: 'React · TypeScript · Framer Motion',
   },
 }

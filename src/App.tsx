@@ -2,7 +2,6 @@ import { lazy, Suspense } from 'react'
 import Navbar from './components/layout/Navbar'
 import Hero from './components/sections/Hero'
 import Footer from './components/layout/Footer'
-import CustomCursor from './components/layout/CustomCursor'
 import ScrollToTop from './components/layout/ScrollToTop'
 
 const About = lazy(() => import('./components/sections/About'))
@@ -14,7 +13,6 @@ const Contact = lazy(() => import('./components/sections/Contact'))
 export default function App() {
   return (
     <>
-      <CustomCursor />
       <Navbar />
       <main>
         <Hero />

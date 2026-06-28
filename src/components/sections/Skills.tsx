@@ -8,7 +8,6 @@ import { VscCode } from 'react-icons/vsc'
 import { useLanguage } from '../../context/LanguageContext'
 import { skills } from '../../data/skills'
 import SectionHeading from '../ui/SectionHeading'
-import GlassCard from '../ui/GlassCard'
 import type { IconType } from 'react-icons'
 
 const iconMap: Record<string, IconType> = {
@@ -30,40 +29,39 @@ export default function Skills() {
   }
 
   return (
-    <section id="skills" className="py-24 bg-dark-card/50">
+    <section id="skills" className="border-y border-line bg-surface/30 py-28">
       <div className="mx-auto max-w-6xl px-6">
         <SectionHeading title={t.skills.title} />
 
-        <div className="grid gap-8 md:grid-cols-3">
+        <div className="grid gap-px overflow-hidden border border-line bg-line md:grid-cols-3">
           {categories.map((category, catIdx) => (
             <motion.div
               key={category}
-              initial={{ opacity: 0, y: 40 }}
+              className="bg-bg p-7"
+              initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-50px' }}
-              transition={{ duration: 0.5, delay: catIdx * 0.15 }}
+              transition={{ duration: 0.5, delay: catIdx * 0.12 }}
             >
-              <GlassCard className="h-full">
-                <h3 className="mb-6 text-lg font-semibold text-neon">
-                  {categoryLabels[category]}
-                </h3>
-                <div className="flex flex-wrap gap-2">
-                  {skills
-                    .filter((s) => s.category === category)
-                    .map((skill) => {
-                      const Icon = iconMap[skill.icon]
-                      return (
-                        <span
-                          key={skill.name}
-                          className="flex items-center gap-2 rounded-lg bg-white/5 px-3 py-2 text-sm text-text-secondary transition-colors hover:bg-neon/10 hover:text-white"
-                        >
-                          {Icon && <Icon className="h-4 w-4 text-neon/70" />}
-                          {skill.name}
-                        </span>
-                      )
-                    })}
-                </div>
-              </GlassCard>
+              <h3 className="mb-6 text-base font-semibold text-ink">
+                {categoryLabels[category]}
+              </h3>
+              <div className="flex flex-wrap gap-2">
+                {skills
+                  .filter((s) => s.category === category)
+                  .map((skill) => {
+                    const Icon = iconMap[skill.icon]
+                    return (
+                      <span
+                        key={skill.name}
+                        className="flex items-center gap-2 border border-line px-3 py-1.5 text-sm text-ink-2 transition-colors hover:border-yellow/50 hover:text-ink"
+                      >
+                        {Icon && <Icon className="h-4 w-4 text-yellow" />}
+                        {skill.name}
+                      </span>
+                    )
+                  })}
+              </div>
             </motion.div>
           ))}
         </div>

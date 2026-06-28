@@ -9,11 +9,12 @@ interface NeonButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 export default function NeonButton({ children, variant = 'primary', href, className, ...props }: NeonButtonProps) {
-  const baseStyles = 'relative inline-flex items-center gap-2 px-6 py-3 rounded-lg font-medium text-sm transition-all duration-300 cursor-pointer'
+  const baseStyles =
+    'group relative inline-flex items-center gap-2 px-6 py-3 text-sm font-medium transition-colors duration-300 cursor-pointer'
 
   const variants = {
-    primary: 'bg-neon text-dark font-semibold hover:glow-md hover:bg-neon/90',
-    outline: 'border border-neon text-neon hover:bg-neon/10 hover:glow-sm',
+    primary: 'bg-yellow text-bg font-medium hover:bg-yellow-deep',
+    outline: 'border border-line text-ink hover:border-yellow hover:text-yellow',
   }
 
   const classes = cn(baseStyles, variants[variant], className)

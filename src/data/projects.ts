@@ -86,5 +86,55 @@ export const projects: Project[] = [
     difficulty: 1,
     github: 'https://github.com/RubenMRDev/MHAWiki',
     demo: 'https://mha-wiki.vercel.app/',
+  },
+  {
+    id: 'project-4',
+    title: {
+      en: 'Pokédex Field Guide',
+      es: 'Pokédex Field Guide',
+    },
+    description: {
+      en: 'Illustrated Pokédex built as the red scanning device itself, powered by PokéAPI: type-defense charts, shiny toggle, cries, evolutions and alternate forms.',
+      es: 'Pokédex ilustrada construida como el propio dispositivo rojo, sobre PokéAPI: gráficos de defensa por tipo, modo shiny, gritos, evoluciones y formas alternativas.',
+    },
+    image: '/pokedex.webp',
+    tags: ['React', 'Vite', 'PokéAPI', 'CSS'],
+    category: 'frontend',
+    difficulty: 3,
+    github: 'https://github.com/RubenMRDev/pokedex-field-guide',
+    demo: 'https://pokedex-field-guide.vercel.app',
+  },
+  {
+    id: 'project-5',
+    title: {
+      en: 'VALORANT Vault',
+      es: 'VALORANT Vault',
+    },
+    description: {
+      en: 'Interactive explorer for the VALORANT API: agents, weapons, 1,300+ skins with video previews, maps, ranks and cosmetics, with command-palette search in 18 languages.',
+      es: 'Explorador interactivo de la API de VALORANT: agentes, armas, más de 1.300 skins con vídeos, mapas, rangos y cosméticos, con búsqueda por paleta de comandos en 18 idiomas.',
+    },
+    image: '/valorant-vault.webp',
+    tags: ['React', 'Vite', 'React Router', 'CSS Modules'],
+    category: 'frontend',
+    difficulty: 3,
+    github: 'https://github.com/RubenMRDev/ValorantVault',
+    demo: 'https://valorant-vault-iota.vercel.app',
+  },
+  {
+    id: 'project-6',
+    title: {
+      en: 'Budgetly',
+      es: 'Budgetly',
+    },
+    description: {
+      en: "Local-first personal budgeting SPA: plan monthly income across categories, track expenses, manage a prioritized wishlist and run 'can I afford this?' simulations, all client-side.",
+      es: "SPA de presupuesto personal local-first: reparte tu ingreso mensual por categorías, registra gastos, gestiona una lista de deseos por prioridad y simula '¿puedo permitírmelo?', todo en el cliente.",
+    },
+    image: '/budgetly.webp',
+    tags: ['React', 'TypeScript', 'Tailwind', 'Vite'],
+    category: 'fullstack',
+    difficulty: 3.5,
+    demo: 'https://budgetly-gules.vercel.app',
   }
 ]

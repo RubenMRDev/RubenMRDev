@@ -6,12 +6,12 @@ export default function LanguageToggle() {
   return (
     <button
       onClick={toggleLang}
-      className="flex items-center gap-1 rounded-full border border-white/20 px-3 py-1.5 text-xs font-medium transition-all duration-300 hover:border-neon/40 hover:glow-sm"
+      className="flex items-center gap-1.5 border border-line px-3 py-1.5 text-xs font-medium transition-colors duration-300 hover:border-yellow/50"
       aria-label={`Switch to ${lang === 'en' ? 'Spanish' : 'English'}`}
     >
-      <span className={lang === 'es' ? 'text-neon' : 'text-text-muted'}>ES</span>
-      <span className="text-text-muted">/</span>
-      <span className={lang === 'en' ? 'text-neon' : 'text-text-muted'}>EN</span>
+      <span className={lang === 'es' ? 'text-yellow' : 'text-muted'}>ES</span>
+      <span className="text-muted">/</span>
+      <span className={lang === 'en' ? 'text-yellow' : 'text-muted'}>EN</span>
     </button>
   )
 }

@@ -15,13 +15,13 @@ export default function ScrollToTop() {
       {visible && (
         <motion.button
           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-          className="fixed bottom-8 right-8 z-50 flex h-12 w-12 items-center justify-center rounded-full bg-neon/20 text-neon backdrop-blur-sm transition-colors hover:bg-neon/30 hover:glow-sm"
-          initial={{ opacity: 0, scale: 0 }}
+          className="fixed bottom-8 right-8 z-50 flex h-11 w-11 items-center justify-center border border-line bg-surface text-ink transition-colors hover:border-yellow hover:text-yellow"
+          initial={{ opacity: 0, scale: 0.6 }}
           animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0, scale: 0 }}
+          exit={{ opacity: 0, scale: 0.6 }}
           aria-label="Scroll to top"
         >
-          <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+          <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M5 15l7-7 7 7" />
           </svg>
         </motion.button>
