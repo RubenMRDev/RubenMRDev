@@ -135,6 +135,6 @@ export const projects: Project[] = [
     tags: ['React', 'TypeScript', 'Tailwind', 'Vite'],
     category: 'fullstack',
     difficulty: 3.5,
-    demo: 'https://budgetly-gules.vercel.app',
+    demo: 'https://budgetlyweb.vercel.app',
   }
 ]
