@@ -1,6 +1,6 @@
 import { useLanguage } from '../../context/LanguageContext'
-import { useReveal } from '../../hooks/useReveal'
 import SectionHeading from '../ui/SectionHeading'
+import Reveal from '../ui/Reveal'
 
 const links = [
   {
@@ -31,18 +31,17 @@ const links = [
 
 export default function Contact() {
   const { t } = useLanguage()
-  const scope = useReveal<HTMLElement>()
 
   return (
-    <section id="contact" ref={scope} className="py-28">
+    <section id="contact" className="py-28">
       <div className="mx-auto max-w-4xl px-6">
         <SectionHeading title={t.contact.title} />
 
-        <p data-reveal className="mb-12 max-w-lg text-2xl font-medium leading-snug text-ink-2 md:text-3xl">
+        <Reveal as="p" className="mb-12 max-w-lg text-2xl font-medium leading-snug text-ink-2 md:text-3xl">
           {t.contact.subtitle}
-        </p>
+        </Reveal>
 
-        <div data-reveal className="border-t border-line">
+        <Reveal delay={0.1} className="border-t border-line">
           {links.map((link) => (
             <a
               key={link.label}
@@ -62,7 +61,7 @@ export default function Contact() {
               </span>
             </a>
           ))}
-        </div>
+        </Reveal>
       </div>
     </section>
   )

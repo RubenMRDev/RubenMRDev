@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useLanguage } from '../../context/LanguageContext'
-import { scrollToSection } from '../../hooks/useReveal'
+import { scrollToSection } from '../../lib/scroll'
 import LanguageToggle from '../ui/LanguageToggle'
 
 const navItems = ['about', 'skills', 'projects', 'experience', 'contact'] as const

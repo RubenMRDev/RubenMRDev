@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { scrollToTop } from '../../lib/scroll'
 
 export default function ScrollToTop() {
   const [visible, setVisible] = useState(false)
@@ -11,10 +12,7 @@ export default function ScrollToTop() {
 
   return (
     <button
-      onClick={() => {
-        const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-        window.scrollTo({ top: 0, behavior: reduced ? 'auto' : 'smooth' })
-      }}
+      onClick={scrollToTop}
       className={`fixed bottom-8 right-8 z-50 flex h-11 w-11 items-center justify-center border border-line bg-surface text-ink transition-all duration-300 ease-out hover:border-yellow hover:text-yellow ${
         visible ? 'scale-100 opacity-100' : 'pointer-events-none scale-75 opacity-0'
       }`}

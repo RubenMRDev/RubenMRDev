@@ -1,16 +1,15 @@
 import { useState } from 'react'
+import { motion, AnimatePresence } from 'motion/react'
 import { useLanguage } from '../../context/LanguageContext'
-import { useReveal } from '../../hooks/useReveal'
 import { projects } from '../../data/projects'
 import SectionHeading from '../ui/SectionHeading'
+import Reveal from '../ui/Reveal'
 
 type Filter = 'all' | 'frontend' | 'fullstack'
 
 export default function Projects() {
   const { t, lang } = useLanguage()
   const [filter, setFilter] = useState<Filter>('all')
-  // Re-arms the reveal when the filter swaps the rendered cards.
-  const scope = useReveal<HTMLElement>(filter)
 
   const filters: { key: Filter; label: string }[] = [
     { key: 'all', label: t.projects.filterAll },
@@ -27,12 +26,12 @@ export default function Projects() {
   const filtered = filter === 'all' ? projects : projects.filter((p) => p.category === filter)
 
   return (
-    <section id="projects" ref={scope} className="py-28">
+    <section id="projects" className="py-28">
       <div className="mx-auto w-full max-w-6xl px-6">
         <div className="flex flex-wrap items-end justify-between gap-6">
           <SectionHeading title={t.projects.title} />
 
-          <div data-reveal className="mb-14 flex flex-wrap gap-2">
+          <Reveal delay={0.1} className="mb-14 flex flex-wrap gap-2">
             {filters.map((f) => (
               <button
                 key={f.key}
@@ -46,17 +45,26 @@ export default function Projects() {
                 {f.label}
               </button>
             ))}
-          </div>
+          </Reveal>
         </div>
       </div>
 
-      <div className="mx-auto grid max-w-6xl auto-rows-fr gap-5 px-6 sm:grid-cols-2 lg:grid-cols-3">
-        {filtered.map((project) => (
-          <article
-            key={project.id}
-            data-reveal
-            className="group relative flex h-full flex-col overflow-hidden border border-line bg-surface transition-[transform,border-color,box-shadow] duration-500 ease-out hover:-translate-y-1.5 hover:border-yellow/50 hover:glow-md"
-          >
+      <motion.div
+        layout
+        className="mx-auto grid max-w-6xl auto-rows-fr gap-5 px-6 sm:grid-cols-2 lg:grid-cols-3"
+      >
+        <AnimatePresence mode="popLayout">
+          {filtered.map((project, i) => (
+            <motion.article
+              key={project.id}
+              layout
+              initial={{ opacity: 0, y: 26 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.96 }}
+              viewport={{ once: true, margin: '0px 0px -12% 0px' }}
+              transition={{ duration: 0.6, delay: (i % 3) * 0.08, ease: [0.16, 1, 0.3, 1] }}
+              className="group relative flex h-full flex-col overflow-hidden border border-line bg-surface transition-[border-color,box-shadow] duration-500 ease-out hover:border-yellow/50 hover:glow-md"
+            >
             {/* Media */}
             <div className="relative aspect-video shrink-0 overflow-hidden bg-surface-2">
               {project.image ? (
@@ -145,9 +153,10 @@ export default function Projects() {
                 </div>
               </div>
             </div>
-          </article>
-        ))}
-      </div>
+            </motion.article>
+          ))}
+        </AnimatePresence>
+      </motion.div>
 
     </section>
   )

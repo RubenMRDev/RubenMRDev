@@ -5,9 +5,9 @@ import {
 } from 'react-icons/si'
 import { VscCode } from 'react-icons/vsc'
 import { useLanguage } from '../../context/LanguageContext'
-import { useReveal } from '../../hooks/useReveal'
 import { skills } from '../../data/skills'
 import SectionHeading from '../ui/SectionHeading'
+import Reveal from '../ui/Reveal'
 import type { IconType } from 'react-icons'
 
 const iconMap: Record<string, IconType> = {
@@ -21,7 +21,6 @@ const categories = ['frontend', 'backend', 'tools'] as const
 
 export default function Skills() {
   const { t } = useLanguage()
-  const scope = useReveal<HTMLElement>()
 
   const categoryLabels: Record<string, string> = {
     frontend: t.skills.frontend,
@@ -30,13 +29,13 @@ export default function Skills() {
   }
 
   return (
-    <section id="skills" ref={scope} className="border-y border-line bg-surface/30 py-28">
+    <section id="skills" className="border-y border-line bg-surface/30 py-28">
       <div className="mx-auto max-w-6xl px-6">
         <SectionHeading title={t.skills.title} />
 
         <div className="grid gap-px overflow-hidden border border-line bg-line md:grid-cols-3">
-          {categories.map((category) => (
-            <div key={category} data-reveal className="bg-bg p-7">
+          {categories.map((category, i) => (
+            <Reveal key={category} delay={i * 0.12} className="bg-bg p-7">
               <h3 className="mb-6 text-base font-semibold text-ink">
                 {categoryLabels[category]}
               </h3>
@@ -56,7 +55,7 @@ export default function Skills() {
                     )
                   })}
               </div>
-            </div>
+            </Reveal>
           ))}
         </div>
       </div>

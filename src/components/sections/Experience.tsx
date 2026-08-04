@@ -1,40 +1,20 @@
-import { useRef, useEffect } from 'react'
+import { useRef } from 'react'
+import { motion, useScroll, useSpring } from 'motion/react'
 import { useLanguage } from '../../context/LanguageContext'
-import { useReveal } from '../../hooks/useReveal'
 import { experience } from '../../data/experience'
 import SectionHeading from '../ui/SectionHeading'
+import Reveal from '../ui/Reveal'
 
 export default function Experience() {
   const { t, lang } = useLanguage()
-  const lineRef = useRef<HTMLDivElement>(null)
-  const sectionRef = useReveal<HTMLElement>()
+  const sectionRef = useRef<HTMLElement>(null)
 
   // The yellow rail fills as the section passes through the viewport.
-  useEffect(() => {
-    const section = sectionRef.current
-    const line = lineRef.current
-    if (!section || !line) return
-
-    let frame = 0
-    const update = () => {
-      frame = 0
-      const { top, height } = section.getBoundingClientRect()
-      const start = window.innerHeight * 0.6
-      const progress = (start - top) / (height - window.innerHeight * 0.2)
-      line.style.transform = `scaleY(${Math.min(1, Math.max(0, progress))})`
-    }
-    const onScroll = () => {
-      if (!frame) frame = requestAnimationFrame(update)
-    }
-    window.addEventListener('scroll', onScroll, { passive: true })
-    window.addEventListener('resize', onScroll, { passive: true })
-    update()
-    return () => {
-      window.removeEventListener('scroll', onScroll)
-      window.removeEventListener('resize', onScroll)
-      cancelAnimationFrame(frame)
-    }
-  }, [sectionRef])
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ['start 60%', 'end 80%'],
+  })
+  const railScale = useSpring(scrollYProgress, { stiffness: 120, damping: 28, mass: 0.3 })
 
   return (
     <section id="experience" ref={sectionRef} className="border-y border-line bg-surface/30 py-28">
@@ -44,17 +24,17 @@ export default function Experience() {
         <div className="relative">
           {/* Timeline rail */}
           <div className="absolute left-4 top-0 bottom-0 hidden w-px bg-line sm:block md:left-1/2 md:-translate-x-px" />
-          <div
-            ref={lineRef}
+          <motion.div
+            style={{ scaleY: railScale }}
             className="absolute left-4 top-0 bottom-0 hidden w-px origin-top bg-yellow sm:block md:left-1/2 md:-translate-x-px"
           />
 
           {/* Entries */}
           <div className="space-y-8 sm:space-y-12">
             {[...experience].reverse().map((entry, i) => (
-              <div
+              <Reveal
                 key={entry.id}
-                data-reveal
+                from={i % 2 === 0 ? 'left' : 'right'}
                 className={`relative flex flex-col md:flex-row ${
                   i % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'
                 }`}
@@ -90,7 +70,7 @@ export default function Experience() {
                     )}
                   </div>
                 </div>
-              </div>
+              </Reveal>
             ))}
           </div>
         </div>
