@@ -11,7 +11,15 @@ export default function Hero() {
   const lastName = rest.join(' ')
 
   useGSAP(() => {
-    if (prefersReducedMotion()) return
+    // Reduced motion still gets an entrance, just a still one: blocks cross-fade
+    // in sequence, with no letter travel, no parallax and no scroll hijacking.
+    if (prefersReducedMotion()) {
+      gsap.from(
+        '[data-hero="kicker"], [data-hero="line"], [data-hero="role"], [data-hero="cta"]',
+        { opacity: 0, duration: 0.5, stagger: 0.1 }
+      )
+      return
+    }
 
     // `mask: 'chars'` wraps every character in its own overflow-hidden box, so
     // the letters slide up from behind the baseline instead of just fading.
