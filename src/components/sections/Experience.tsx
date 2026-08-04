@@ -1,40 +1,32 @@
-import { useRef, useEffect } from 'react'
-import { motion } from 'framer-motion'
+import { useRef } from 'react'
 import gsap from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { useGSAP } from '@gsap/react'
 import { useLanguage } from '../../context/LanguageContext'
+import { useReveal } from '../../hooks/useReveal'
 import { experience } from '../../data/experience'
 import SectionHeading from '../ui/SectionHeading'
-
-gsap.registerPlugin(ScrollTrigger)
 
 export default function Experience() {
   const { t, lang } = useLanguage()
   const lineRef = useRef<HTMLDivElement>(null)
-  const sectionRef = useRef<HTMLDivElement>(null)
+  const sectionRef = useReveal<HTMLElement>()
 
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      if (lineRef.current) {
-        gsap.fromTo(
-          lineRef.current,
-          { scaleY: 0 },
-          {
-            scaleY: 1,
-            ease: 'none',
-            scrollTrigger: {
-              trigger: sectionRef.current,
-              start: 'top 60%',
-              end: 'bottom 80%',
-              scrub: 1,
-            },
-          }
-        )
+  useGSAP(() => {
+    gsap.fromTo(
+      lineRef.current,
+      { scaleY: 0 },
+      {
+        scaleY: 1,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: 'top 60%',
+          end: 'bottom 80%',
+          scrub: 1,
+        },
       }
-    }, sectionRef)
-
-    return () => ctx.revert()
-  }, [])
+    )
+  }, { scope: sectionRef })
 
   return (
     <section id="experience" ref={sectionRef} className="border-y border-line bg-surface/30 py-28">
@@ -52,15 +44,12 @@ export default function Experience() {
           {/* Entries */}
           <div className="space-y-8 sm:space-y-12">
             {[...experience].reverse().map((entry, i) => (
-              <motion.div
+              <div
                 key={entry.id}
+                data-reveal
                 className={`relative flex flex-col md:flex-row ${
                   i % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'
                 }`}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.2 }}
-                transition={{ duration: 0.6, delay: i * 0.12 }}
               >
                 {/* Node */}
                 <div className="absolute left-4 top-2 z-10 hidden h-2.5 w-2.5 -translate-x-1/2 rotate-45 border border-yellow bg-bg sm:block md:left-1/2" />
@@ -93,7 +82,7 @@ export default function Experience() {
                     )}
                   </div>
                 </div>
-              </motion.div>
+              </div>
             ))}
           </div>
         </div>

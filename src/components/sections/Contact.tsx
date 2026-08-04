@@ -1,5 +1,5 @@
-import { motion } from 'framer-motion'
 import { useLanguage } from '../../context/LanguageContext'
+import { useReveal } from '../../hooks/useReveal'
 import SectionHeading from '../ui/SectionHeading'
 
 const links = [
@@ -31,28 +31,18 @@ const links = [
 
 export default function Contact() {
   const { t } = useLanguage()
+  const scope = useReveal<HTMLElement>()
 
   return (
-    <section id="contact" className="py-28">
+    <section id="contact" ref={scope} className="py-28">
       <div className="mx-auto max-w-4xl px-6">
         <SectionHeading title={t.contact.title} />
 
-        <motion.p
-          className="mb-12 max-w-lg text-2xl font-medium leading-snug text-ink-2 md:text-3xl"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-        >
+        <p data-reveal className="mb-12 max-w-lg text-2xl font-medium leading-snug text-ink-2 md:text-3xl">
           {t.contact.subtitle}
-        </motion.p>
+        </p>
 
-        <motion.div
-          className="border-t border-line"
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-        >
+        <div data-reveal className="border-t border-line">
           {links.map((link) => (
             <a
               key={link.label}
@@ -72,7 +62,7 @@ export default function Contact() {
               </span>
             </a>
           ))}
-        </motion.div>
+        </div>
       </div>
     </section>
   )

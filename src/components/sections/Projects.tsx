@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useLanguage } from '../../context/LanguageContext'
+import { useReveal } from '../../hooks/useReveal'
 import { projects } from '../../data/projects'
 import SectionHeading from '../ui/SectionHeading'
 
@@ -9,6 +10,7 @@ type Filter = 'all' | 'frontend' | 'fullstack'
 export default function Projects() {
   const { t, lang } = useLanguage()
   const [filter, setFilter] = useState<Filter>('all')
+  const scope = useReveal<HTMLElement>()
 
   const filters: { key: Filter; label: string }[] = [
     { key: 'all', label: t.projects.filterAll },
@@ -25,13 +27,13 @@ export default function Projects() {
   const filtered = filter === 'all' ? projects : projects.filter((p) => p.category === filter)
 
   return (
-    <section id="projects" className="py-28">
+    <section id="projects" ref={scope} className="py-28">
       <div className="mx-auto max-w-6xl px-6">
         <div className="flex flex-wrap items-end justify-between gap-6">
           <SectionHeading title={t.projects.title} />
 
           {/* Filters */}
-          <div className="mb-14 flex flex-wrap gap-2">
+          <div data-reveal className="mb-14 flex flex-wrap gap-2">
             {filters.map((f) => (
               <button
                 key={f.key}

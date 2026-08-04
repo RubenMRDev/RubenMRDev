@@ -1,7 +1,11 @@
-import { useEffect, useRef } from 'react'
+import { useRef } from 'react'
 import gsap from 'gsap'
+import { useGSAP } from '@gsap/react'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { useLanguage } from '../../context/LanguageContext'
 import NeonButton from '../ui/NeonButton'
+
+gsap.registerPlugin(useGSAP, ScrollTrigger)
 
 export default function Hero() {
   const { t } = useLanguage()
@@ -10,21 +14,26 @@ export default function Hero() {
   const [firstName, ...rest] = t.hero.name.split(' ')
   const lastName = rest.join(' ')
 
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      const tl = gsap.timeline({ defaults: { ease: 'power3.out' } })
-      tl.fromTo('[data-hero="kicker"]', { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.6, delay: 0.15 })
-        .fromTo(
-          '[data-hero="line"]',
-          { opacity: 0, y: 50, clipPath: 'inset(0 0 100% 0)' },
-          { opacity: 1, y: 0, clipPath: 'inset(0 0 0% 0)', duration: 0.9, stagger: 0.12 },
-          '-=0.3'
-        )
-        .fromTo('[data-hero="role"]', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.7 }, '-=0.4')
-        .fromTo('[data-hero="cta"]', { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.6 }, '-=0.35')
-    }, containerRef)
-    return () => ctx.revert()
-  }, [])
+  useGSAP(() => {
+    const tl = gsap.timeline({ defaults: { ease: 'power3.out' } })
+    tl.fromTo('[data-hero="kicker"]', { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.6, delay: 0.15 })
+      .fromTo(
+        '[data-hero="line"]',
+        { opacity: 0, y: 50, clipPath: 'inset(0 0 100% 0)' },
+        { opacity: 1, y: 0, clipPath: 'inset(0 0 0% 0)', duration: 0.9, stagger: 0.12 },
+        '-=0.3'
+      )
+      .fromTo('[data-hero="role"]', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.7 }, '-=0.4')
+      .fromTo('[data-hero="cta"]', { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.6 }, '-=0.35')
+
+    // Parallax: the content drifts up and fades as the hero scrolls away.
+    gsap.to('[data-hero="content"]', {
+      y: -80,
+      opacity: 0,
+      ease: 'none',
+      scrollTrigger: { trigger: containerRef.current, start: 'top top', end: 'bottom top', scrub: true },
+    })
+  }, { scope: containerRef })
 
   return (
     <section
@@ -45,7 +54,7 @@ export default function Hero() {
         />
       </div>
 
-      <div className="relative z-10 mx-auto w-full max-w-6xl px-6">
+      <div data-hero="content" className="relative z-10 mx-auto w-full max-w-6xl px-6">
         <p data-hero="kicker" className="mb-6 flex items-center gap-3 text-sm font-medium text-muted">
           <span className="inline-block h-1.5 w-1.5 rounded-full bg-yellow" />
           {t.hero.greeting}
