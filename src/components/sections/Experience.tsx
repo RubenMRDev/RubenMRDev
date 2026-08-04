@@ -1,6 +1,4 @@
-import { useRef } from 'react'
-import gsap from 'gsap'
-import { useGSAP } from '@gsap/react'
+import { useRef, useEffect } from 'react'
 import { useLanguage } from '../../context/LanguageContext'
 import { useReveal } from '../../hooks/useReveal'
 import { experience } from '../../data/experience'
@@ -11,22 +9,32 @@ export default function Experience() {
   const lineRef = useRef<HTMLDivElement>(null)
   const sectionRef = useReveal<HTMLElement>()
 
-  useGSAP(() => {
-    gsap.fromTo(
-      lineRef.current,
-      { scaleY: 0 },
-      {
-        scaleY: 1,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: 'top 60%',
-          end: 'bottom 80%',
-          scrub: 1,
-        },
-      }
-    )
-  }, { scope: sectionRef })
+  // The yellow rail fills as the section passes through the viewport.
+  useEffect(() => {
+    const section = sectionRef.current
+    const line = lineRef.current
+    if (!section || !line) return
+
+    let frame = 0
+    const update = () => {
+      frame = 0
+      const { top, height } = section.getBoundingClientRect()
+      const start = window.innerHeight * 0.6
+      const progress = (start - top) / (height - window.innerHeight * 0.2)
+      line.style.transform = `scaleY(${Math.min(1, Math.max(0, progress))})`
+    }
+    const onScroll = () => {
+      if (!frame) frame = requestAnimationFrame(update)
+    }
+    window.addEventListener('scroll', onScroll, { passive: true })
+    window.addEventListener('resize', onScroll, { passive: true })
+    update()
+    return () => {
+      window.removeEventListener('scroll', onScroll)
+      window.removeEventListener('resize', onScroll)
+      cancelAnimationFrame(frame)
+    }
+  }, [sectionRef])
 
   return (
     <section id="experience" ref={sectionRef} className="border-y border-line bg-surface/30 py-28">

@@ -8,7 +8,6 @@ import { useLanguage } from '../../context/LanguageContext'
 import { useReveal } from '../../hooks/useReveal'
 import { skills } from '../../data/skills'
 import SectionHeading from '../ui/SectionHeading'
-import Marquee from '../ui/Marquee'
 import type { IconType } from 'react-icons'
 
 const iconMap: Record<string, IconType> = {
@@ -19,15 +18,6 @@ const iconMap: Record<string, IconType> = {
 }
 
 const categories = ['frontend', 'backend', 'tools'] as const
-
-const marqueeItems = skills.map((skill) => {
-  const Icon = iconMap[skill.icon]
-  return {
-    key: skill.name,
-    label: skill.name,
-    icon: Icon ? <Icon className="h-6 w-6 md:h-8 md:w-8" /> : undefined,
-  }
-})
 
 export default function Skills() {
   const { t } = useLanguage()
@@ -41,13 +31,9 @@ export default function Skills() {
 
   return (
     <section id="skills" ref={scope} className="border-y border-line bg-surface/30 py-28">
-      <div className="mx-auto mb-16 max-w-6xl px-6">
+      <div className="mx-auto max-w-6xl px-6">
         <SectionHeading title={t.skills.title} />
-      </div>
 
-      <Marquee items={marqueeItems} />
-
-      <div className="mx-auto mt-16 max-w-6xl px-6">
         <div className="grid gap-px overflow-hidden border border-line bg-line md:grid-cols-3">
           {categories.map((category) => (
             <div key={category} data-reveal className="bg-bg p-7">

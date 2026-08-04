@@ -1,5 +1,4 @@
-import { useState, useRef } from 'react'
-import { gsap, useGSAP, prefersReducedMotion } from '../../lib/gsap'
+import { useState } from 'react'
 import { useLanguage } from '../../context/LanguageContext'
 import { useReveal } from '../../hooks/useReveal'
 import { projects } from '../../data/projects'
@@ -7,16 +6,11 @@ import SectionHeading from '../ui/SectionHeading'
 
 type Filter = 'all' | 'frontend' | 'fullstack'
 
-/** Slack at the end of the track so the last card clears the right edge. */
-const TAIL = 96
-
 export default function Projects() {
   const { t, lang } = useLanguage()
   const [filter, setFilter] = useState<Filter>('all')
-  const sectionRef = useRef<HTMLElement>(null)
-  const trackRef = useRef<HTMLDivElement>(null)
-  const barRef = useRef<HTMLDivElement>(null)
-  const headerRef = useReveal<HTMLDivElement>()
+  // Re-arms the reveal when the filter swaps the rendered cards.
+  const scope = useReveal<HTMLElement>(filter)
 
   const filters: { key: Filter; label: string }[] = [
     { key: 'all', label: t.projects.filterAll },
@@ -32,43 +26,9 @@ export default function Projects() {
 
   const filtered = filter === 'all' ? projects : projects.filter((p) => p.category === filter)
 
-  useGSAP(() => {
-    const track = trackRef.current
-    if (!track || prefersReducedMotion()) return
-
-    // Cards always animate in, on every filter change.
-    gsap.from(track.children, { opacity: 0, y: 40, duration: 0.7, stagger: 0.07 })
-
-    // The horizontal gallery is desktop-only: on a phone, pinning a section and
-    // hijacking the scroll direction fights the user instead of impressing them.
-    const mm = gsap.matchMedia()
-    mm.add('(min-width: 768px) and (hover: hover)', () => {
-      const distance = () => Math.max(0, track.scrollWidth - window.innerWidth + TAIL)
-
-      gsap.to(track, {
-        x: () => -distance(),
-        ease: 'none',
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          pin: true,
-          scrub: 1,
-          start: 'top top',
-          end: () => `+=${distance()}`,
-          invalidateOnRefresh: true, // widths change with the filter and on resize
-          onUpdate: (self) => gsap.set(barRef.current, { scaleX: self.progress }),
-        },
-      })
-    })
-    return () => mm.revert()
-  }, { scope: sectionRef, dependencies: [filter], revertOnUpdate: true })
-
   return (
-    <section
-      id="projects"
-      ref={sectionRef}
-      className="overflow-hidden py-28 md:flex md:h-screen md:flex-col md:justify-center md:py-0"
-    >
-      <div ref={headerRef} className="mx-auto w-full max-w-6xl px-6">
+    <section id="projects" ref={scope} className="py-28">
+      <div className="mx-auto w-full max-w-6xl px-6">
         <div className="flex flex-wrap items-end justify-between gap-6">
           <SectionHeading title={t.projects.title} />
 
@@ -90,15 +50,12 @@ export default function Projects() {
         </div>
       </div>
 
-      {/* Track: a grid on mobile, a single horizontal row from md up. */}
-      <div
-        ref={trackRef}
-        className="grid auto-rows-fr gap-5 px-6 sm:grid-cols-2 md:flex md:w-max md:auto-rows-auto md:pl-[max(1.5rem,calc((100vw-72rem)/2))] md:pr-24 lg:grid-cols-3"
-      >
+      <div className="mx-auto grid max-w-6xl auto-rows-fr gap-5 px-6 sm:grid-cols-2 lg:grid-cols-3">
         {filtered.map((project) => (
           <article
             key={project.id}
-            className="group relative flex h-full flex-col overflow-hidden border border-line bg-surface transition-[transform,border-color,box-shadow] duration-500 ease-out hover:-translate-y-1.5 hover:border-yellow/50 hover:glow-md md:h-auto md:w-[26rem] md:shrink-0"
+            data-reveal
+            className="group relative flex h-full flex-col overflow-hidden border border-line bg-surface transition-[transform,border-color,box-shadow] duration-500 ease-out hover:-translate-y-1.5 hover:border-yellow/50 hover:glow-md"
           >
             {/* Media */}
             <div className="relative aspect-video shrink-0 overflow-hidden bg-surface-2">
@@ -192,12 +149,6 @@ export default function Projects() {
         ))}
       </div>
 
-      {/* Horizontal progress, desktop only */}
-      <div className="mx-auto mt-10 hidden w-full max-w-6xl px-6 md:block">
-        <div className="h-px w-full bg-line">
-          <div ref={barRef} className="h-px w-full origin-left scale-x-0 bg-yellow" />
-        </div>
-      </div>
     </section>
   )
 }

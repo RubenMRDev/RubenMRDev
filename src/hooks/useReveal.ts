@@ -1,45 +1,46 @@
-import { useRef } from 'react'
-import { gsap, useGSAP, ScrollTrigger, prefersReducedMotion } from '../lib/gsap'
-
-/** Hidden state: the element sits below its own mask, cropped at the baseline. */
-const HIDDEN = { opacity: 0, y: 60, clipPath: 'inset(0% -20% 100% -20%)' }
-/** Resting state: the mask is pushed outside the box so shadows are never clipped. */
-const SHOWN = { opacity: 1, y: 0, clipPath: 'inset(0% -20% -20% -20%)' }
+import { useEffect, useRef } from 'react'
 
 /**
- * Reveals every `[data-reveal]` inside the returned ref as it enters the
- * viewport: the element rises from behind its own mask. Elements that enter
- * together animate as one staggered batch.
+ * Reveals every `[data-reveal]` inside the returned ref once it scrolls into
+ * view. Elements that cross the line together are staggered.
  *
- * Under prefers-reduced-motion this degrades to a plain cross-fade rather than
- * nothing at all: WCAG 2.3.3 is about large movement, not opacity.
+ * Plain IntersectionObserver: the motion itself lives in CSS (see globals.css),
+ * so this only decides *when*, never *how*.
  */
-export function useReveal<T extends HTMLElement = HTMLElement>() {
+export function useReveal<T extends HTMLElement = HTMLElement>(resetKey?: unknown) {
   const scope = useRef<T>(null)
 
-  useGSAP(() => {
-    const targets = gsap.utils.toArray<HTMLElement>('[data-reveal]', scope.current)
-    if (!targets.length) return
+  useEffect(() => {
+    const targets = scope.current?.querySelectorAll<HTMLElement>('[data-reveal]')
+    if (!targets?.length) return
 
-    const calm = prefersReducedMotion()
-    gsap.set(targets, calm ? { opacity: 0 } : HIDDEN)
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries
+          // `top < 0` catches anything already scrolled past: an anchor jump or a
+          // fast flick can take an element from below the fold to above it without
+          // it ever reporting as intersecting, which would strand it invisible.
+          .filter((entry) => entry.isIntersecting || entry.boundingClientRect.top < 0)
+          .forEach((entry, i) => {
+            const el = entry.target as HTMLElement
+            el.style.setProperty('--reveal-delay', entry.isIntersecting ? `${i * 80}ms` : '0ms')
+            el.classList.add('is-visible')
+            observer.unobserve(el) // reveal once, then stop watching
+          })
+      },
+      { rootMargin: '0px 0px -12% 0px', threshold: 0.05 }
+    )
 
-    ScrollTrigger.batch(targets, {
-      start: 'top 85%',
-      once: true,
-      onEnter: (els) =>
-        gsap.to(els, {
-          ...(calm ? { opacity: 1 } : SHOWN),
-          duration: calm ? 0.4 : 1.1,
-          stagger: calm ? 0.04 : 0.09,
-          overwrite: true,
-        }),
-    })
-
-    // Lazy-loaded sections mount after the page settles, so positions computed
-    // by earlier ScrollTriggers (and by ScrollSmoother) are stale until this.
-    ScrollTrigger.refresh()
-  }, { scope })
+    targets.forEach((el) => observer.observe(el))
+    return () => observer.disconnect()
+    // resetKey re-arms the observer when the rendered set changes (e.g. filters).
+  }, [resetKey])
 
   return scope
+}
+
+/** Smooth anchor scrolling that steps aside when the user asked for less motion. */
+export function scrollToSection(id: string) {
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  document.getElementById(id)?.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth' })
 }

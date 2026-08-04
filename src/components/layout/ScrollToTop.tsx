@@ -1,9 +1,7 @@
-import { useState, useEffect, useRef } from 'react'
-import { gsap, useGSAP, ScrollSmoother, prefersReducedMotion } from '../../lib/gsap'
+import { useState, useEffect } from 'react'
 
 export default function ScrollToTop() {
   const [visible, setVisible] = useState(false)
-  const btnRef = useRef<HTMLButtonElement>(null)
 
   useEffect(() => {
     const handleScroll = () => setVisible(window.scrollY > 500)
@@ -11,25 +9,14 @@ export default function ScrollToTop() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  useGSAP(() => {
-    gsap.to(btnRef.current, {
-      opacity: visible ? 1 : 0,
-      scale: visible ? 1 : 0.6,
-      duration: prefersReducedMotion() ? 0 : 0.35,
-      ease: 'power3.out',
-    })
-  }, { dependencies: [visible] })
-
   return (
     <button
-      ref={btnRef}
       onClick={() => {
-        const smoother = ScrollSmoother.get()
-        if (smoother) smoother.scrollTo(0, !prefersReducedMotion())
-        else window.scrollTo({ top: 0, behavior: 'smooth' })
+        const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+        window.scrollTo({ top: 0, behavior: reduced ? 'auto' : 'smooth' })
       }}
-      className={`fixed bottom-8 right-8 z-50 flex h-11 w-11 scale-[0.6] items-center justify-center border border-line bg-surface text-ink opacity-0 transition-colors hover:border-yellow hover:text-yellow ${
-        visible ? '' : 'pointer-events-none'
+      className={`fixed bottom-8 right-8 z-50 flex h-11 w-11 items-center justify-center border border-line bg-surface text-ink transition-all duration-300 ease-out hover:border-yellow hover:text-yellow ${
+        visible ? 'scale-100 opacity-100' : 'pointer-events-none scale-75 opacity-0'
       }`}
       aria-label="Scroll to top"
       aria-hidden={!visible}
