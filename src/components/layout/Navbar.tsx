@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useLanguage } from '../../context/LanguageContext'
+import { scrollToSection } from '../../lib/gsap'
 import LanguageToggle from '../ui/LanguageToggle'
 
 const navItems = ['about', 'skills', 'projects', 'experience', 'contact'] as const
@@ -24,7 +25,7 @@ export default function Navbar() {
   }, [lastScrollY])
 
   const scrollTo = (id: string) => {
-    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
+    scrollToSection(id)
     setIsMobileOpen(false)
   }
 

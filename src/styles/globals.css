@@ -33,8 +33,24 @@
     box-sizing: border-box;
   }
 
+  /* No `scroll-behavior: smooth` here: it fights ScrollSmoother.
+     Anchor jumps go through scrollToSection() in src/lib/gsap.ts. */
   html {
-    scroll-behavior: smooth;
+    overscroll-behavior-y: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
   }
 
   body {

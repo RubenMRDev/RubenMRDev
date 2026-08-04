@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { ScrollSmoother, prefersReducedMotion } from '../../lib/gsap'
 
 export default function ScrollToTop() {
   const [visible, setVisible] = useState(false)
@@ -14,7 +15,11 @@ export default function ScrollToTop() {
     <AnimatePresence>
       {visible && (
         <motion.button
-          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          onClick={() => {
+            const smoother = ScrollSmoother.get()
+            if (smoother) smoother.scrollTo(0, !prefersReducedMotion())
+            else window.scrollTo({ top: 0, behavior: 'smooth' })
+          }}
           className="fixed bottom-8 right-8 z-50 flex h-11 w-11 items-center justify-center border border-line bg-surface text-ink transition-colors hover:border-yellow hover:text-yellow"
           initial={{ opacity: 0, scale: 0.6 }}
           animate={{ opacity: 1, scale: 1 }}

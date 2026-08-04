@@ -1,37 +1,48 @@
 import { useRef } from 'react'
-import gsap from 'gsap'
-import { useGSAP } from '@gsap/react'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { gsap, useGSAP, SplitText, prefersReducedMotion, scrollToSection } from '../../lib/gsap'
 import { useLanguage } from '../../context/LanguageContext'
 import NeonButton from '../ui/NeonButton'
 
-gsap.registerPlugin(useGSAP, ScrollTrigger)
-
 export default function Hero() {
   const { t } = useLanguage()
-  const containerRef = useRef<HTMLDivElement>(null)
+  const containerRef = useRef<HTMLElement>(null)
 
   const [firstName, ...rest] = t.hero.name.split(' ')
   const lastName = rest.join(' ')
 
   useGSAP(() => {
-    const tl = gsap.timeline({ defaults: { ease: 'power3.out' } })
-    tl.fromTo('[data-hero="kicker"]', { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.6, delay: 0.15 })
-      .fromTo(
-        '[data-hero="line"]',
-        { opacity: 0, y: 50, clipPath: 'inset(0 0 100% 0)' },
-        { opacity: 1, y: 0, clipPath: 'inset(0 0 0% 0)', duration: 0.9, stagger: 0.12 },
-        '-=0.3'
-      )
-      .fromTo('[data-hero="role"]', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.7 }, '-=0.4')
-      .fromTo('[data-hero="cta"]', { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.6 }, '-=0.35')
+    if (prefersReducedMotion()) return
 
-    // Parallax: the content drifts up and fades as the hero scrolls away.
+    // `mask: 'chars'` wraps every character in its own overflow-hidden box, so
+    // the letters slide up from behind the baseline instead of just fading.
+    const split = SplitText.create('[data-hero="line"]', {
+      type: 'chars',
+      mask: 'chars',
+    })
+
+    const tl = gsap.timeline()
+    tl.from('[data-hero="kicker"]', { opacity: 0, y: 16, duration: 0.7, delay: 0.15 })
+      .from(
+        split.chars,
+        { yPercent: 115, duration: 1.1, stagger: { each: 0.035, from: 'start' } },
+        '-=0.4'
+      )
+      .from('[data-hero="rule"]', { scaleX: 0, duration: 1.2 }, '-=0.85')
+      .from('[data-hero="role"]', { opacity: 0, y: 24, duration: 0.9 }, '-=0.9')
+      .from('[data-hero="cta"]', { opacity: 0, y: 20, duration: 0.8 }, '-=0.75')
+      .from('[data-hero="cue"]', { opacity: 0, duration: 0.6 }, '-=0.5')
+
+    // The hero recedes as the next section takes over.
     gsap.to('[data-hero="content"]', {
-      y: -80,
+      y: -110,
       opacity: 0,
       ease: 'none',
-      scrollTrigger: { trigger: containerRef.current, start: 'top top', end: 'bottom top', scrub: true },
+      scrollTrigger: {
+        trigger: containerRef.current,
+        start: 'top top',
+        end: 'bottom top',
+        scrub: true,
+      },
     })
   }, { scope: containerRef })
 
@@ -41,9 +52,12 @@ export default function Hero() {
       ref={containerRef}
       className="relative flex min-h-screen items-center overflow-hidden"
     >
-      {/* Warm depth, not neon glow */}
+      {/* Warm depth, not neon glow. data-speed makes it drift slower than the page. */}
       <div className="pointer-events-none absolute inset-0">
-        <div className="absolute -top-1/4 right-0 h-[600px] w-[600px] rounded-full bg-yellow/[0.04] blur-[140px]" />
+        <div
+          data-speed="0.85"
+          className="absolute -top-1/4 right-0 h-[600px] w-[600px] rounded-full bg-yellow/[0.05] blur-[140px]"
+        />
         <div
           className="absolute inset-0 opacity-[0.04]"
           style={{
@@ -61,35 +75,34 @@ export default function Hero() {
         </p>
 
         <h1 className="text-6xl font-bold leading-[0.95] tracking-tight text-ink sm:text-7xl md:text-8xl lg:text-[8.5rem]">
-          <span data-hero="line" className="block overflow-hidden">{firstName}</span>
-          <span data-hero="line" className="block overflow-hidden">
+          <span data-hero="line" className="block">{firstName}</span>
+          <span data-hero="line" className="block">
             {lastName}
             <span className="text-yellow">.</span>
           </span>
         </h1>
+
+        <div data-hero="rule" className="mt-8 h-px w-full origin-left bg-line" />
 
         <p data-hero="role" className="mt-8 max-w-md text-lg text-muted">
           {t.hero.subtitle}
         </p>
 
         <div data-hero="cta" className="mt-10 flex flex-col gap-3 sm:flex-row">
-          <NeonButton
-            variant="primary"
-            onClick={() => document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })}
-          >
+          <NeonButton variant="primary" magnetic onClick={() => scrollToSection('projects')}>
             {t.hero.cta1}
           </NeonButton>
-          <NeonButton
-            variant="outline"
-            onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
-          >
+          <NeonButton variant="outline" magnetic onClick={() => scrollToSection('contact')}>
             {t.hero.cta2}
           </NeonButton>
         </div>
       </div>
 
       {/* Scroll cue */}
-      <div className="absolute bottom-8 left-1/2 flex -translate-x-1/2 items-center gap-2 text-xs text-muted">
+      <div
+        data-hero="cue"
+        className="absolute bottom-8 left-1/2 flex -translate-x-1/2 items-center gap-2 text-xs text-muted"
+      >
         <span>Scroll</span>
         <span className="inline-block h-8 w-px animate-pulse bg-line" />
       </div>

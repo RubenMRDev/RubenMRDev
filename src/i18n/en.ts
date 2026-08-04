@@ -53,6 +53,6 @@ export const en: Translations = {
   },
   footer: {
     rights: 'All rights reserved.',
-    builtWith: 'React · TypeScript · Framer Motion',
+    builtWith: 'React · TypeScript · GSAP',
   },
 }
