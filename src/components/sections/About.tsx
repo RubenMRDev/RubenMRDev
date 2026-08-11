@@ -1,60 +1,55 @@
 import { useLanguage } from '../../context/LanguageContext'
 import SectionHeading from '../ui/SectionHeading'
 import Reveal from '../ui/Reveal'
+import Counter from '../ui/Counter'
 
 const stats = [
-  { value: '1+', key: 'yearsExp' as const },
-  { value: '6', key: 'projectsCompleted' as const },
-  { value: '16', key: 'techStack' as const },
+  { to: 1, suffix: '+', key: 'yearsExp' as const },
+  { to: 6, suffix: '', key: 'projectsCompleted' as const },
+  { to: 16, suffix: '', key: 'techStack' as const },
 ]
 
 export default function About() {
   const { t } = useLanguage()
 
   return (
-    <section id="about" className="py-28">
-      <div className="mx-auto max-w-6xl px-6">
-        <SectionHeading title={t.about.title} />
+    <section id="about" className="px-6 py-24 md:px-10 md:py-36">
+      <div className="mx-auto w-full max-w-6xl">
+        <SectionHeading eyebrow={t.about.eyebrow} title={t.about.title} className="mb-16" />
 
-        <div className="grid gap-14 md:grid-cols-[5fr_7fr] md:items-start">
-          {/* Photo with offset editorial frame */}
-          <Reveal from="left" className="relative max-w-[70%]">
-            <div className="absolute -bottom-3 -right-3 h-full w-full border border-yellow/40" />
-            <div className="relative aspect-[4/5] overflow-hidden border border-line bg-surface">
+        <div className="grid gap-12 md:grid-cols-[minmax(0,4fr)_minmax(0,7fr)] md:gap-20">
+          <Reveal from="left">
+            <div className="relative overflow-hidden rounded-3xl bg-canvas-2">
               <img
                 src="/myprofile.webp"
                 alt="Rubén Martín Ruiz"
-                className="h-full w-full object-cover grayscale-[0.2]"
+                className="aspect-[4/5] w-full object-cover"
               />
             </div>
-            <p className="mt-4 text-sm text-muted">
-              Rubén Martín Ruiz
-            </p>
           </Reveal>
 
-          {/* Bio + spec sheet */}
-          <Reveal delay={0.12}>
-            <p className="max-w-xl text-lg leading-relaxed text-ink-2">
-              {t.about.bio}
-            </p>
+          <div className="md:pt-2">
+            <Reveal delay={0.08}>
+              <p className="max-w-[66ch] text-heading font-medium text-ink">{t.about.bio}</p>
+            </Reveal>
 
-            <div className="mt-12 grid grid-cols-3 border-t border-line">
+            <Reveal delay={0.16}>
+              <p className="mt-6 max-w-[68ch] text-body text-ink-2">{t.about.detail}</p>
+            </Reveal>
+
+            <div className="mt-14 grid grid-cols-3 gap-6 border-t border-hairline pt-8 sm:gap-10">
               {stats.map((stat, i) => (
-                <Reveal
-                  key={stat.key}
-                  delay={0.25 + i * 0.1}
-                  className={`py-6 ${i > 0 ? 'border-l border-line pl-5' : ''}`}
-                >
-                  <div className="text-4xl font-bold leading-none text-yellow md:text-5xl">
-                    {stat.value}
+                <Reveal key={stat.key} delay={0.24 + i * 0.08}>
+                  <div className="nums text-title font-semibold text-ink">
+                    <Counter to={stat.to} suffix={stat.suffix} />
                   </div>
-                  <div className="mt-3 text-xs leading-snug text-muted">
+                  <div className="mt-2 font-mono text-micro uppercase leading-relaxed text-ink-3">
                     {t.about[stat.key]}
                   </div>
                 </Reveal>
               ))}
             </div>
-          </Reveal>
+          </div>
         </div>
       </div>
     </section>

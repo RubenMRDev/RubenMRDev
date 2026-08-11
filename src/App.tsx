@@ -4,6 +4,7 @@ import Navbar from './components/layout/Navbar'
 import Hero from './components/sections/Hero'
 import Footer from './components/layout/Footer'
 import ScrollToTop from './components/layout/ScrollToTop'
+import Cursor from './components/ui/Cursor'
 import { startSmoothScroll } from './lib/scroll'
 
 const About = lazy(() => import('./components/sections/About'))
@@ -24,8 +25,9 @@ export default function App() {
     <MotionConfig reducedMotion="user">
       <motion.div
         style={{ scaleX: progress }}
-        className="fixed left-0 top-0 z-[60] h-0.5 w-full origin-left bg-yellow"
+        className="fixed left-0 top-0 z-[60] h-px w-full origin-left bg-accent"
       />
+
       <Navbar />
       <main>
         <Hero />
@@ -39,6 +41,7 @@ export default function App() {
       </main>
       <Footer />
       <ScrollToTop />
+      <Cursor />
     </MotionConfig>
   )
 }

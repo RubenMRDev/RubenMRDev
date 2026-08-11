@@ -1,17 +1,31 @@
 import { useLanguage } from '../../context/LanguageContext'
 
+/**
+ * Segmented control. The live language sits on a raised pill.
+ *
+ * Borderless on purpose: it is always mounted inside a pill that already draws
+ * one, and two concentric rounded borders read as a mistake.
+ */
 export default function LanguageToggle() {
   const { lang, toggleLang } = useLanguage()
 
   return (
     <button
+      type="button"
       onClick={toggleLang}
-      className="flex items-center gap-1.5 border border-line px-3 py-1.5 text-xs font-medium transition-colors duration-300 hover:border-yellow/50"
-      aria-label={`Switch to ${lang === 'en' ? 'Spanish' : 'English'}`}
+      className="flex rounded-full"
+      aria-label={lang === 'en' ? 'Cambiar a español' : 'Switch to English'}
     >
-      <span className={lang === 'es' ? 'text-yellow' : 'text-muted'}>ES</span>
-      <span className="text-muted">/</span>
-      <span className={lang === 'en' ? 'text-yellow' : 'text-muted'}>EN</span>
+      {(['en', 'es'] as const).map((code) => (
+        <span
+          key={code}
+          className={`rounded-full px-2.5 py-1.5 font-mono text-[0.68rem] uppercase tracking-[0.08em] transition-colors duration-300 ${
+            lang === code ? 'bg-ink text-canvas' : 'text-ink-3'
+          }`}
+        >
+          {code}
+        </span>
+      ))}
     </button>
   )
 }

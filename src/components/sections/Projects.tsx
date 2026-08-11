@@ -1,163 +1,183 @@
-import { useState } from 'react'
-import { motion, AnimatePresence } from 'motion/react'
+import { useEffect, useRef, useState } from 'react'
+import { motion, useScroll, useSpring, useTransform } from 'motion/react'
 import { useLanguage } from '../../context/LanguageContext'
 import { projects } from '../../data/projects'
+import { useMediaQuery } from '../../lib/media'
 import SectionHeading from '../ui/SectionHeading'
-import Reveal from '../ui/Reveal'
 
-type Filter = 'all' | 'frontend' | 'fullstack'
+const EASE = [0.16, 1, 0.3, 1] as const
 
+/**
+ * The run pins and the work travels sideways: vertical scroll drives horizontal
+ * distance, so the whole set reads as one continuous pass instead of a grid.
+ *
+ * Below md there is nothing to pin. The same panels stack and the motion value
+ * is never applied, which is why this needs a media query rather than CSS.
+ */
 export default function Projects() {
   const { t, lang } = useLanguage()
-  const [filter, setFilter] = useState<Filter>('all')
+  const isDesktop = useMediaQuery('(min-width: 768px)')
 
-  const filters: { key: Filter; label: string }[] = [
-    { key: 'all', label: t.projects.filterAll },
-    { key: 'frontend', label: t.projects.filterFrontend },
-    { key: 'fullstack', label: t.projects.filterFullstack },
-  ]
+  const runwayRef = useRef<HTMLDivElement>(null)
+  const trackRef = useRef<HTMLDivElement>(null)
+  const [distance, setDistance] = useState(0)
+
+  // ResizeObserver fires once on observe, so the first measurement arrives from
+  // the callback rather than from a synchronous write inside the effect. A
+  // stale distance below md is harmless: every consumer of it is gated on
+  // isDesktop.
+  useEffect(() => {
+    const track = trackRef.current
+    if (!track || !isDesktop) return
+
+    const measure = () => setDistance(Math.max(0, track.scrollWidth - window.innerWidth))
+
+    // The track can stay the same width while the viewport changes, so the
+    // window needs watching too.
+    const observer = new ResizeObserver(measure)
+    observer.observe(track)
+    window.addEventListener('resize', measure)
+
+    return () => {
+      observer.disconnect()
+      window.removeEventListener('resize', measure)
+    }
+  }, [isDesktop])
+
+  const { scrollYProgress } = useScroll({
+    target: runwayRef,
+    offset: ['start start', 'end end'],
+  })
+  const rawX = useTransform(scrollYProgress, [0, 1], [0, -distance])
+  // Tight on purpose. Lenis already smooths the wheel, so a soft spring here
+  // would stack a second lag on top and the rail would trail the page.
+  const x = useSpring(rawX, { stiffness: 400, damping: 45, mass: 0.35 })
+  const progress = useSpring(scrollYProgress, { stiffness: 180, damping: 34, mass: 0.4 })
 
   const categoryLabel: Record<string, string> = {
-    frontend: t.projects.filterFrontend,
-    fullstack: t.projects.filterFullstack,
+    frontend: t.projects.frontend,
+    fullstack: t.projects.fullstack,
     other: lang === 'en' ? 'Other' : 'Otro',
   }
 
-  const filtered = filter === 'all' ? projects : projects.filter((p) => p.category === filter)
-
   return (
-    <section id="projects" className="py-28">
-      <div className="mx-auto w-full max-w-6xl px-6">
-        <div className="flex flex-wrap items-end justify-between gap-6">
-          <SectionHeading title={t.projects.title} />
+    <section id="projects" className="bg-deep text-deep-ink-2">
+      <div
+        ref={runwayRef}
+        style={isDesktop ? { height: `calc(100svh + ${distance}px)` } : undefined}
+      >
+        <div className="flex flex-col justify-center overflow-hidden px-6 py-24 md:sticky md:top-0 md:h-svh md:px-0 md:py-0">
+          <div className="mb-14 flex flex-wrap items-end justify-between gap-6 md:px-10">
+            <SectionHeading eyebrow={t.projects.eyebrow} title={t.projects.title} onDeep />
+            <span className="nums font-mono text-micro uppercase text-deep-ink-2">
+              {String(projects.length).padStart(2, '0')} {t.projects.count}
+            </span>
+          </div>
 
-          <Reveal delay={0.1} className="mb-14 flex flex-wrap gap-2">
-            {filters.map((f) => (
-              <button
-                key={f.key}
-                onClick={() => setFilter(f.key)}
-                className={`border px-4 py-2 text-sm transition-colors duration-300 ${
-                  filter === f.key
-                    ? 'border-yellow bg-yellow text-bg'
-                    : 'border-line text-muted hover:border-yellow/50 hover:text-ink'
-                }`}
-              >
-                {f.label}
-              </button>
-            ))}
-          </Reveal>
+          <motion.div
+            ref={trackRef}
+            style={isDesktop ? { x } : undefined}
+            className="flex flex-col gap-14 md:w-max md:flex-row md:gap-8 md:px-10"
+          >
+            {projects.map((project, i) => {
+              const primary = project.demo ?? project.github
+
+              return (
+                <motion.article
+                  key={project.id}
+                  initial={{ opacity: 0, y: 24 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: '0px 0px -10% 0px' }}
+                  transition={{ duration: 0.75, delay: (i % 3) * 0.08, ease: EASE }}
+                  className="flex w-full shrink-0 flex-col md:w-[clamp(21rem,38vw,32rem)]"
+                >
+                  <a
+                    href={primary}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    data-cursor-label={t.projects.open}
+                    className="group relative block overflow-hidden rounded-2xl bg-deep-2"
+                  >
+                    <img
+                      src={project.image}
+                      alt={project.title[lang]}
+                      loading="lazy"
+                      className="aspect-[16/10] w-full object-cover transition-transform duration-700 ease-[var(--ease-out-expo)] group-hover:scale-[1.04]"
+                    />
+                  </a>
+
+                  <div className="mt-6 flex items-baseline gap-4">
+                    <span className="nums font-mono text-micro text-deep-ink-2/70">
+                      {String(i + 1).padStart(2, '0')}
+                    </span>
+                    <span className="font-mono text-micro uppercase text-accent-soft">
+                      {categoryLabel[project.category]}
+                    </span>
+                  </div>
+
+                  <h3 className="mt-3 text-heading font-semibold text-deep-ink">
+                    {project.title[lang]}
+                  </h3>
+
+                  <p className="mt-3 max-w-[52ch] text-small text-deep-ink-2">
+                    {project.description[lang]}
+                  </p>
+
+                  <ul className="mt-5 flex flex-wrap gap-x-3 gap-y-1.5">
+                    {project.tags.map((tag) => (
+                      <li
+                        key={tag}
+                        className="rounded-full border border-deep-line px-3 py-1 font-mono text-[0.68rem] text-deep-ink-2"
+                      >
+                        {tag}
+                      </li>
+                    ))}
+                  </ul>
+
+                  <div className="mt-6 flex flex-wrap gap-x-6 gap-y-2">
+                    {project.demo && (
+                      <a
+                        href={project.demo}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="group inline-flex items-center gap-1.5 text-small font-medium text-deep-ink transition-colors hover:text-accent-soft"
+                      >
+                        {t.projects.viewDemo}
+                        <span
+                          aria-hidden="true"
+                          className="transition-transform duration-300 ease-[var(--ease-out-expo)] group-hover:translate-x-0.5"
+                        >
+                          ↗
+                        </span>
+                      </a>
+                    )}
+                    {project.github && (
+                      <a
+                        href={project.github}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-small text-deep-ink-2 transition-colors hover:text-deep-ink"
+                      >
+                        {t.projects.viewCode}
+                      </a>
+                    )}
+                  </div>
+                </motion.article>
+              )
+            })}
+          </motion.div>
+
+          {/* Where you are in the pass */}
+          {isDesktop && distance > 0 && (
+            <div className="mt-14 h-px w-full bg-deep-line md:mx-10 md:w-[calc(100%-5rem)]">
+              <motion.div
+                style={{ scaleX: progress }}
+                className="h-full origin-left bg-accent-soft"
+              />
+            </div>
+          )}
         </div>
       </div>
-
-      <motion.div
-        layout
-        className="mx-auto grid max-w-6xl auto-rows-fr gap-5 px-6 sm:grid-cols-2 lg:grid-cols-3"
-      >
-        <AnimatePresence mode="popLayout">
-          {filtered.map((project, i) => (
-            <motion.article
-              key={project.id}
-              layout
-              initial={{ opacity: 0, y: 26 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.96 }}
-              viewport={{ once: true, margin: '0px 0px -12% 0px' }}
-              transition={{ duration: 0.6, delay: (i % 3) * 0.08, ease: [0.16, 1, 0.3, 1] }}
-              className="group relative flex h-full flex-col overflow-hidden border border-line bg-surface transition-[border-color,box-shadow] duration-500 ease-out hover:border-yellow/50 hover:glow-md"
-            >
-            {/* Media */}
-            <div className="relative aspect-video shrink-0 overflow-hidden bg-surface-2">
-              {project.image ? (
-                <img
-                  src={project.image}
-                  alt={project.title[lang]}
-                  className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.06]"
-                  loading="lazy"
-                />
-              ) : (
-                <div className="flex h-full items-center justify-center font-mono text-3xl text-muted/40">
-                  {'</>'}
-                </div>
-              )}
-              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-bg/85 via-transparent to-transparent" />
-              <span className="absolute left-3 top-3 border border-yellow/40 bg-bg/70 px-2.5 py-1 text-xs font-medium text-yellow backdrop-blur-sm">
-                {categoryLabel[project.category]}
-              </span>
-            </div>
-
-            {/* Content */}
-            <div className="flex flex-1 flex-col p-5">
-              <h3 className="mb-2 text-xl font-semibold leading-tight text-ink">
-                {project.title[lang]}
-              </h3>
-              <p className="mb-5 line-clamp-3 min-h-[3.9rem] text-sm leading-relaxed text-muted">
-                {project.description[lang]}
-              </p>
-
-              <div className="mt-auto space-y-4">
-                {/* Difficulty */}
-                <div className="flex items-center gap-2">
-                  <span className="text-xs text-muted">
-                    {lang === 'en' ? 'Difficulty' : 'Dificultad'}
-                  </span>
-                  <div className="flex gap-1">
-                    {Array.from({ length: 5 }).map((_, i) => {
-                      const filledBar = project.difficulty >= i + 1
-                      const half = !filledBar && project.difficulty > i && project.difficulty < i + 1
-                      return (
-                        <div key={i} className="relative h-1.5 w-5 overflow-hidden bg-line">
-                          <div
-                            className="absolute inset-y-0 left-0 bg-yellow"
-                            style={{ width: filledBar ? '100%' : half ? '50%' : '0%' }}
-                          />
-                        </div>
-                      )
-                    })}
-                  </div>
-                </div>
-
-                {/* Tags */}
-                <div className="flex min-h-[1.75rem] flex-wrap gap-1.5">
-                  {project.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="border border-line px-2 py-0.5 font-mono text-[0.68rem] text-muted"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-
-                {/* Actions */}
-                <div className="flex gap-2 pt-1">
-                  {project.github && (
-                    <a
-                      href={project.github}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex-1 border border-line px-4 py-2 text-center text-sm font-medium text-ink transition-colors duration-300 hover:border-yellow hover:text-yellow"
-                    >
-                      {t.projects.viewCode}
-                    </a>
-                  )}
-                  {project.demo && (
-                    <a
-                      href={project.demo}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex-1 bg-yellow px-4 py-2 text-center text-sm font-medium text-bg transition-colors duration-300 hover:bg-yellow-deep"
-                    >
-                      {t.projects.viewDemo}
-                    </a>
-                  )}
-                </div>
-              </div>
-            </div>
-            </motion.article>
-          ))}
-        </AnimatePresence>
-      </motion.div>
-
     </section>
   )
 }

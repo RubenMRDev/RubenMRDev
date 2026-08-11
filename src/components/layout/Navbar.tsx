@@ -5,9 +5,11 @@ import LanguageToggle from '../ui/LanguageToggle'
 
 const navItems = ['about', 'skills', 'projects', 'experience', 'contact'] as const
 
+const pill =
+  'rounded-full border border-hairline bg-canvas/70 shadow-[0_8px_32px_-14px_rgba(0,0,0,0.75)] backdrop-blur-2xl backdrop-saturate-150'
+
 export default function Navbar() {
   const { t } = useLanguage()
-  const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileOpen, setIsMobileOpen] = useState(false)
   const [hidden, setHidden] = useState(false)
 
@@ -15,8 +17,7 @@ export default function Navbar() {
     let lastY = window.scrollY
     const handleScroll = () => {
       const currentY = window.scrollY
-      setIsScrolled(currentY > 50)
-      setHidden(currentY > lastY && currentY > 200)
+      setHidden(currentY > lastY && currentY > 220)
       lastY = currentY
     }
     window.addEventListener('scroll', handleScroll, { passive: true })
@@ -30,80 +31,69 @@ export default function Navbar() {
 
   return (
     <>
+      {/* A floating pill rather than a full-width bar: it never touches the
+          viewport edges, so the page reads as continuous behind it. The pill
+          carries the sections and nothing else; language sits on its own. */}
       <nav
-        className={`fixed top-0 z-50 w-full transition-[transform,background-color,border-color] duration-300 ease-out ${
-          isScrolled
-            ? 'border-b border-line bg-bg/85 backdrop-blur-sm'
-            : 'border-b border-transparent bg-transparent'
-        } ${hidden && !isMobileOpen ? '-translate-y-full' : 'translate-y-0'}`}
+        className={`fixed inset-x-0 top-4 z-50 flex items-center justify-center px-4 transition-transform duration-500 ease-[var(--ease-out-expo)] ${
+          hidden && !isMobileOpen ? '-translate-y-[200%]' : 'translate-y-0'
+        }`}
       >
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-5">
-          <a
-            href="#hero"
-            onClick={(e) => { e.preventDefault(); scrollTo('hero') }}
-            className="text-lg font-bold tracking-tight text-ink transition-colors hover:text-yellow"
-          >
-            RMR<span className="text-yellow">.</span>
-          </a>
+        <div className={`hidden items-center gap-0.5 p-1.5 md:flex ${pill}`}>
+          {navItems.map((item) => (
+            <button
+              key={item}
+              type="button"
+              onClick={() => scrollTo(item)}
+              className="rounded-full px-4 py-1.5 text-small text-ink-2 transition-colors duration-300 hover:bg-canvas-2 hover:text-ink"
+            >
+              {t.nav[item]}
+            </button>
+          ))}
+        </div>
 
-          {/* Desktop nav */}
-          <div className="hidden items-center gap-8 md:flex">
-            {navItems.map((item) => (
-              <button
-                key={item}
-                onClick={() => scrollTo(item)}
-                className="text-sm text-muted transition-colors hover:text-ink"
-              >
-                {t.nav[item]}
-              </button>
-            ))}
-            <LanguageToggle />
-          </div>
+        <button
+          type="button"
+          onClick={() => setIsMobileOpen(!isMobileOpen)}
+          className={`flex h-11 w-11 flex-col items-center justify-center gap-[5px] md:hidden ${pill}`}
+          aria-label="Toggle menu"
+          aria-expanded={isMobileOpen}
+        >
+          <span
+            className={`block h-px w-4 bg-ink transition-transform duration-500 ease-[var(--ease-out-expo)] ${
+              isMobileOpen ? 'translate-y-[3px] rotate-45' : ''
+            }`}
+          />
+          <span
+            className={`block h-px w-4 bg-ink transition-transform duration-500 ease-[var(--ease-out-expo)] ${
+              isMobileOpen ? '-translate-y-[3px] -rotate-45' : ''
+            }`}
+          />
+        </button>
 
-          {/* Mobile hamburger */}
-          <button
-            onClick={() => setIsMobileOpen(!isMobileOpen)}
-            className="relative z-50 flex flex-col gap-1.5 md:hidden"
-            aria-label="Toggle menu"
-            aria-expanded={isMobileOpen}
-          >
-            <span
-              className={`block h-px w-6 origin-center bg-ink transition-transform duration-300 ease-out ${
-                isMobileOpen ? 'translate-y-[7px] rotate-45' : ''
-              }`}
-            />
-            <span
-              className={`block h-px w-6 bg-ink transition-opacity duration-300 ease-out ${
-                isMobileOpen ? 'opacity-0' : 'opacity-100'
-              }`}
-            />
-            <span
-              className={`block h-px w-6 origin-center bg-ink transition-transform duration-300 ease-out ${
-                isMobileOpen ? '-translate-y-[7px] -rotate-45' : ''
-              }`}
-            />
-          </button>
+        <div className={`absolute right-4 p-1 ${pill}`}>
+          <LanguageToggle />
         </div>
       </nav>
 
-      {/* Mobile menu: stays mounted so it can fade out; inert keeps it out of
-          the tab order and the a11y tree while closed. */}
+      {/* Stays mounted so it can fade out; inert keeps it out of the tab order
+          and the a11y tree while closed. */}
       <div
         inert={!isMobileOpen}
-        className={`fixed inset-0 z-40 flex flex-col items-center justify-center gap-6 bg-bg/97 transition-opacity duration-300 ease-out md:hidden ${
+        className={`fixed inset-0 z-40 flex flex-col justify-center gap-1 bg-canvas/95 px-6 backdrop-blur-2xl transition-opacity duration-500 ease-[var(--ease-out-expo)] md:hidden ${
           isMobileOpen ? 'opacity-100' : 'pointer-events-none opacity-0'
         }`}
       >
         {navItems.map((item) => (
           <button
             key={item}
+            type="button"
             onClick={() => scrollTo(item)}
-            className="text-3xl font-semibold text-ink transition-colors hover:text-yellow"
+            className="border-b border-hairline py-4 text-left text-heading font-medium text-ink"
           >
             {t.nav[item]}
           </button>
         ))}
-        <LanguageToggle />
       </div>
     </>
   )

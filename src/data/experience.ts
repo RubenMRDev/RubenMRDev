@@ -27,6 +27,7 @@ export const experience: ExperienceEntry[] = [
       ],
     },
     type: 'job',
+    current: true,
   },
   {
     id: 'exp-2',

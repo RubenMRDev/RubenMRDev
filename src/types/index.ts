@@ -9,51 +9,55 @@ export interface Translations {
     contact: string
   }
   hero: {
-    greeting: string
     name: string
     subtitle: string
+    tagline: string
     cta1: string
     cta2: string
+    location: string
+    scroll: string
   }
   about: {
+    eyebrow: string
     title: string
     bio: string
+    detail: string
     yearsExp: string
     projectsCompleted: string
     techStack: string
   }
   skills: {
+    eyebrow: string
     title: string
     frontend: string
     backend: string
     tools: string
+    coverage: string
   }
   projects: {
+    eyebrow: string
     title: string
-    filterAll: string
-    filterFrontend: string
-    filterFullstack: string
+    count: string
+    frontend: string
+    fullstack: string
     viewCode: string
     viewDemo: string
+    open: string
   }
   experience: {
+    eyebrow: string
     title: string
     present: string
+    internship: string
   }
   contact: {
+    eyebrow: string
     title: string
     subtitle: string
-    name: string
-    email: string
-    message: string
     send: string
-    sending: string
-    sent: string
-    error: string
   }
   footer: {
     rights: string
-    builtWith: string
   }
 }
 
@@ -82,4 +86,6 @@ export interface ExperienceEntry {
   role: { en: string; es: string }
   description: { en: string[]; es: string[] }
   type: 'internship' | 'job'
+  /** The role still running. Set explicitly rather than inferred from order. */
+  current?: boolean
 }

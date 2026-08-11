@@ -9,11 +9,27 @@ export const prefersReducedMotion = () =>
  * Starts Lenis inertial scrolling and returns the teardown.
  * Skipped entirely when the visitor asked for reduced motion: retiming someone's
  * scroll is exactly the kind of motion that setting exists to refuse.
+ *
+ * `lerp` rather than `duration`: duration restarts a fixed eased animation on
+ * every wheel tick, which is what made a fast series of ticks feel stepped.
+ * Frame-rate independent interpolation chases the target continuously instead,
+ * so a burst of ticks reads as one glide. Lenis treats the two as mutually
+ * exclusive, so duration is gone rather than tuned.
+ *
+ * Only the wheel is retimed. Touch keeps the platform's own momentum, which is
+ * already better than anything worth reimplementing.
  */
 export function startSmoothScroll() {
   if (prefersReducedMotion()) return () => {}
 
-  lenis = new Lenis({ duration: 1.1, smoothWheel: true })
+  lenis = new Lenis({
+    lerp: 0.085,
+    smoothWheel: true,
+    // Slightly under 1 so the longer glide does not also cover more ground per
+    // notch; without this, smoother reads as "runs away from you".
+    wheelMultiplier: 0.92,
+    syncTouch: false,
+  })
 
   let frame = requestAnimationFrame(function raf(time) {
     lenis?.raf(time)

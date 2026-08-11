@@ -1,29 +1,72 @@
 @import "tailwindcss";
 
+/* ---------------------------------------------------------------------------
+   Dark by default. Neutrals are tinted a few thousandths toward blue so the
+   greys never read warm or "filtered". Never #fff, never #000, and one accent
+   that stays under a tenth of the surface.
+
+   `canvas` is the page, `canvas-2` is a raised band, `deep` is the recessed
+   band the work sits in. Elevation reads as lighter, depth as darker.
+--------------------------------------------------------------------------- */
+
 @theme {
-  /* Warm near-black, tinted toward the yellow hue (~95) — no cold blue-black */
-  --color-bg: oklch(0.165 0.008 95);
-  --color-surface: oklch(0.205 0.010 95);
-  --color-surface-2: oklch(0.245 0.012 95);
-  --color-line: oklch(0.34 0.010 95);
-  --color-ink: oklch(0.95 0.012 95);
-  --color-ink-2: oklch(0.80 0.012 95);
-  --color-muted: oklch(0.64 0.013 95);
-  --color-yellow: #facc15;
-  --color-yellow-deep: #c79a0a;
+  --color-canvas: oklch(0.191 0.010 265);
+  --color-canvas-2: oklch(0.232 0.011 265);
+  --color-canvas-3: oklch(0.286 0.012 265);
 
-  /* Back-compat aliases for any markup still using the old names */
-  --color-dark: oklch(0.165 0.008 95);
-  --color-dark-card: oklch(0.205 0.010 95);
-  --color-dark-lighter: oklch(0.245 0.012 95);
-  --color-neon: #facc15;
-  --color-neon-dark: #c79a0a;
-  --color-text-primary: oklch(0.95 0.012 95);
-  --color-text-secondary: oklch(0.80 0.012 95);
-  --color-text-muted: oklch(0.64 0.013 95);
+  --color-ink: oklch(0.972 0.003 262);
+  --color-ink-2: oklch(0.742 0.010 265);
+  --color-ink-3: oklch(0.578 0.012 265);
 
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", monospace;
+  --color-hairline: oklch(0.302 0.012 265);
+
+  /* The recessed band, so project stills read as lit objects on it */
+  --color-deep: oklch(0.142 0.009 265);
+  --color-deep-2: oklch(0.205 0.011 265);
+  --color-deep-line: oklch(0.278 0.012 265);
+  --color-deep-ink: oklch(0.972 0.003 262);
+  --color-deep-ink-2: oklch(0.728 0.010 265);
+
+  /* Lifted off the light-mode accent: the same blue would go muddy down here */
+  --color-accent: oklch(0.708 0.155 258);
+  --color-accent-soft: oklch(0.775 0.128 258);
+
+  --font-sans: "Geist", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono: "Geist Mono", ui-monospace, "SFMono-Regular", monospace;
+
+  /* Optical tracking: the larger the size, the tighter the fit. This is the
+     single adjustment that separates system-font typography that looks set
+     from typography that looks defaulted. */
+  --text-display: clamp(2.75rem, 7.2vw, 5.75rem);
+  --text-display--line-height: 1.02;
+  --text-display--letter-spacing: -0.043em;
+
+  --text-title: clamp(2rem, 4.6vw, 3.5rem);
+  --text-title--line-height: 1.06;
+  --text-title--letter-spacing: -0.034em;
+
+  --text-heading: clamp(1.5rem, 3vw, 2.25rem);
+  --text-heading--line-height: 1.14;
+  --text-heading--letter-spacing: -0.024em;
+
+  --text-lead: clamp(1.125rem, 1.55vw, 1.4rem);
+  --text-lead--line-height: 1.5;
+  --text-lead--letter-spacing: -0.016em;
+
+  --text-body: 1.0625rem;
+  --text-body--line-height: 1.62;
+  --text-body--letter-spacing: -0.011em;
+
+  --text-small: 0.875rem;
+  --text-small--line-height: 1.5;
+  --text-small--letter-spacing: -0.006em;
+
+  --text-micro: 0.75rem;
+  --text-micro--line-height: 1.25;
+  --text-micro--letter-spacing: 0.055em;
+
+  /* One curve for everything. Exponential ease-out, no overshoot. */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 @layer base {
@@ -35,50 +78,76 @@
 
   html {
     scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
   }
 
-  /* Reveals live in <Reveal> (Motion). Reduced motion is handled by
-     MotionConfig reducedMotion="user" in App.tsx: fades stay, travel goes. */
   @media (prefers-reduced-motion: reduce) {
     html {
       scroll-behavior: auto;
     }
+
+    /* Motion's own animations are handled by MotionConfig reducedMotion="user";
+       these are the CSS-driven loops it cannot see. */
+    .animate-ping,
+    .animate-pulse,
+    .animate-spin,
+    .animate-bounce {
+      animation: none;
+    }
   }
 
   body {
-    background-color: var(--color-bg);
+    background-color: var(--color-canvas);
     color: var(--color-ink-2);
     font-family: var(--font-sans);
+    font-size: var(--text-body);
+    line-height: 1.62;
+    letter-spacing: -0.011em;
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    font-synthesis-weight: none;
+  }
+
+  /* The custom cursor hides the native one, but only once it has actually
+     mounted; if the script never runs the real pointer stays. */
+  html.has-cursor,
+  html.has-cursor * {
+    cursor: none;
   }
 
   ::selection {
-    background: var(--color-yellow);
-    color: var(--color-bg);
+    background: color-mix(in oklch, var(--color-accent) 22%, transparent);
+    color: var(--color-ink);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+    border-radius: 2px;
   }
 
   ::-webkit-scrollbar {
-    width: 10px;
+    width: 11px;
   }
 
   ::-webkit-scrollbar-track {
-    background: var(--color-bg);
+    background: transparent;
   }
 
   ::-webkit-scrollbar-thumb {
-    background: var(--color-surface-2);
-    border: 2px solid var(--color-bg);
-    border-radius: 0;
+    background: var(--color-canvas-3);
+    border: 3px solid var(--color-canvas);
+    border-radius: 99px;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: var(--color-yellow-deep);
+    background: var(--color-ink-3);
   }
 }
 
-/* Elevation, not neon. Warm dark shadow gives depth without the glow cliché. */
-@utility glow-md {
-  box-shadow: 0 10px 34px rgba(0, 0, 0, 0.45);
+/* Tabular figures keep counters and meters from reflowing as they tick. */
+@utility nums {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
 }
