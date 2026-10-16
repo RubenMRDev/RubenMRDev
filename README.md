@@ -2,7 +2,8 @@
 
 ### Hi, I'm Rubén 👋
 
-**Fullstack Developer** @ Renterus — React, React Native, TypeScript & PHP.<br/>
+**Fullstack Developer** — React, React Native, TypeScript & PHP.<br/>
+
 I build modern, high-performance interfaces and the APIs behind them.
 
 <a href="https://ruben-mr-dev.vercel.app"><img src="https://img.shields.io/badge/Portfolio-7AA2F7?style=for-the-badge&logo=vercel&logoColor=white" alt="Portfolio"></a>
