@@ -6,7 +6,7 @@
 
 I build modern, high-performance interfaces and the APIs behind them.
 
-<a href="https://ruben-mr-dev.vercel.app"><img src="https://img.shields.io/badge/Portfolio-7AA2F7?style=for-the-badge&logo=vercel&logoColor=white" alt="Portfolio"></a>
+<a href="https://rubenmrdev.vercel.app"><img src="https://img.shields.io/badge/Portfolio-7AA2F7?style=for-the-badge&logo=vercel&logoColor=white" alt="Portfolio"></a>
 <a href="https://www.linkedin.com/in/rub%C3%A9n-mart%C3%ADn-ruiz-985397252/"><img src="https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn"></a>
 <a href="mailto:rubenmrdev@gmail.com"><img src="https://img.shields.io/badge/Email-EA4335?style=for-the-badge&logo=gmail&logoColor=white" alt="Email"></a>
 
@@ -59,7 +59,7 @@ I build modern, high-performance interfaces and the APIs behind them.
 | 💸 **[Budgetly](https://budgetlyweb.vercel.app)** | Local-first budgeting: plan, track, *"can I afford this?"* | `React` `TS` `Tailwind` |
 | 🔴 **[Pokédex Field Guide](https://pokedex-field-guide.vercel.app)** | An illustrated Pokédex built as the red device itself | `React` `Vite` `PokéAPI` |
 
-**[→ More projects at ruben-mr-dev.vercel.app](https://ruben-mr-dev.vercel.app)**
+**[→ More projects at rubenmrdev.vercel.app](https://rubenmrdev.vercel.app)**
 
 ---
 

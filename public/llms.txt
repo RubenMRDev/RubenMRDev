@@ -1,0 +1,8 @@
+# RubenMRDev
+
+> RubenMRDev is Rubén Martín Ruiz, a fullstack developer building modern web and mobile apps with React, React Native, TypeScript and PHP.
+
+- Portfolio: https://rubenmrdev.vercel.app/
+- GitHub: https://github.com/RubenMRDev
+- LinkedIn: https://www.linkedin.com/in/rubenmrdev/
+- Email: rubenmrdev@gmail.com
