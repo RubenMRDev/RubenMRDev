@@ -1,55 +1,59 @@
+import { motion } from 'motion/react'
 import { useLanguage } from '../../context/LanguageContext'
-import SectionHeading from '../ui/SectionHeading'
-import Reveal from '../ui/Reveal'
+import { projects } from '../../data/projects'
+import { skills } from '../../data/skills'
+import ScrollHighlight from '../fx/ScrollHighlight'
+import SectionTitle from '../ui/SectionTitle'
 import Counter from '../ui/Counter'
-
-const stats = [
-  { to: 1, suffix: '+', key: 'yearsExp' as const },
-  { to: 6, suffix: '', key: 'projectsCompleted' as const },
-  { to: 16, suffix: '', key: 'techStack' as const },
-]
 
 export default function About() {
   const { t } = useLanguage()
 
+  const stats = [
+    { value: 1, suffix: '+', label: t.about.yearsExp },
+    { value: projects.length, suffix: '', label: t.about.projectsCompleted },
+    { value: skills.length, suffix: '', label: t.about.techStack },
+  ]
+
   return (
-    <section id="about" className="px-6 py-24 md:px-10 md:py-36">
-      <div className="mx-auto w-full max-w-6xl">
-        <SectionHeading eyebrow={t.about.eyebrow} title={t.about.title} className="mb-16" />
+    <section id="about" className="relative px-5 py-28 md:px-10 md:py-40">
+      <div className="mx-auto max-w-[90rem]">
+        <SectionTitle index="01" eyebrow={t.about.eyebrow} title={t.about.title} />
 
-        <div className="grid gap-12 md:grid-cols-[minmax(0,4fr)_minmax(0,7fr)] md:gap-20">
-          <Reveal from="left">
-            <div className="relative overflow-hidden rounded-3xl bg-canvas-2">
-              <img
-                src="/myprofile.webp"
-                alt="Rubén Martín Ruiz"
-                className="aspect-[4/5] w-full object-cover"
-              />
-            </div>
-          </Reveal>
-
-          <div className="md:pt-2">
-            <Reveal delay={0.08}>
-              <p className="max-w-[66ch] text-heading font-medium text-ink">{t.about.bio}</p>
-            </Reveal>
-
-            <Reveal delay={0.16}>
-              <p className="mt-6 max-w-[68ch] text-body text-ink-2">{t.about.detail}</p>
-            </Reveal>
-
-            <div className="mt-14 grid grid-cols-3 gap-6 border-t border-hairline pt-8 sm:gap-10">
-              {stats.map((stat, i) => (
-                <Reveal key={stat.key} delay={0.24 + i * 0.08}>
-                  <div className="nums text-title font-semibold text-ink">
-                    <Counter to={stat.to} suffix={stat.suffix} />
-                  </div>
-                  <div className="mt-2 font-mono text-micro uppercase leading-relaxed text-ink-3">
-                    {t.about[stat.key]}
-                  </div>
-                </Reveal>
-              ))}
-            </div>
+        <div className="grid gap-16 lg:grid-cols-[1.4fr_1fr] lg:gap-24">
+          <div>
+            <ScrollHighlight
+              text={t.about.bio}
+              className="font-display text-[clamp(1.75rem,3.6vw,3.25rem)] font-semibold leading-[1.1] tracking-tight text-ink"
+            />
+            <motion.p
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '0px 0px -10% 0px' }}
+              transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+              className="mt-10 max-w-2xl text-lead text-ink-2"
+            >
+              {t.about.detail}
+            </motion.p>
           </div>
+
+          <dl className="grid content-start gap-px overflow-hidden rounded-3xl border border-line bg-line">
+            {stats.map((stat, i) => (
+              <motion.div
+                key={stat.label}
+                initial={{ opacity: 0, x: 40 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: i * 0.12 }}
+                className="group flex items-end justify-between gap-6 bg-canvas p-7 transition-colors duration-500 hover:bg-canvas-2"
+              >
+                <dt className="font-mono text-micro uppercase text-ink-3">{stat.label}</dt>
+                <dd className="font-display text-7xl font-extrabold leading-none tracking-tighter text-ink transition-colors duration-500 group-hover:text-accent">
+                  <Counter to={stat.value} suffix={stat.suffix} className="nums" />
+                </dd>
+              </motion.div>
+            ))}
+          </dl>
         </div>
       </div>
     </section>
