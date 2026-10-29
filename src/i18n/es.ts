@@ -6,7 +6,6 @@ export const es: Translations = {
     skills: 'Stack',
     projects: 'Proyectos',
     experience: 'Experiencia',
-    contact: 'Contacto',
   },
   hero: {
     name: 'Rubén Martín Ruiz',
@@ -20,10 +19,10 @@ export const es: Translations = {
   },
   about: {
     eyebrow: 'Sobre mí',
-    title: 'Me importa cómo están hechas las cosas.',
-    bio: 'Busco que un producto sea rápido, claro y que siga siendo fácil de mantener cuando el equipo crece.',
+    title: 'Empezó como curiosidad. Lo sigue siendo.',
+    bio: 'De pequeño abría una web y me preguntaba cómo estaba hecha. Esa curiosidad nunca se fue: hoy soy yo quien las construye, y sigo disfrutándolo como el primer día.',
     detail:
-      'Me muevo igual de cómodo en el front que en el back, y me interesa tanto cómo se siente una interfaz como qué hay debajo sosteniéndola. Prefiero entender por qué algo funciona antes que dejarlo funcionando sin más, y casi siempre tengo un proyecto propio en marcha para probar ideas nuevas.',
+      'Me muevo igual de cómodo en el front que en el back, pero lo que más me importa es la experiencia de usuario: que todo se entienda a la primera, responda rápido y sea agradable de usar. Para mí, una interfaz bien hecha es la que nadie tiene que pararse a pensar.',
     yearsExp: 'Años de experiencia',
     projectsCompleted: 'Proyectos publicados',
     techStack: 'Tecnologías',
@@ -51,12 +50,6 @@ export const es: Translations = {
     title: 'Dónde he trabajado.',
     present: 'Actualidad',
     internship: 'Prácticas',
-  },
-  contact: {
-    eyebrow: 'Contacto',
-    title: 'Construyamos algo.',
-    subtitle: '¿Tienes una idea, una vacante o un proyecto que necesite manos fullstack? Escríbeme.',
-    send: 'Escríbeme un email',
   },
   footer: {
     rights: 'Todos los derechos reservados.',

@@ -1,30 +1,35 @@
 import { useLanguage } from '../../context/LanguageContext'
-import { scrollToTop } from '../../lib/scroll'
-import VelocityMarquee from '../fx/VelocityMarquee'
+
+const socials = [
+  { href: 'https://github.com/RubenMRDev', label: 'GitHub' },
+  { href: 'https://www.linkedin.com/in/rubenmrdev/', label: 'LinkedIn' },
+  { href: 'mailto:rubenmrdev@gmail.com', label: 'Email' },
+]
 
 export default function Footer() {
-  const { t, lang } = useLanguage()
+  const { t } = useLanguage()
+  const year = new Date().getFullYear()
 
   return (
-    <footer className="relative overflow-hidden pt-10 pb-8">
-      <VelocityMarquee speed={1.5}>
-        {['RubenMRDev', 'Fullstack', 'React', 'TypeScript', 'PHP'].map((word) => (
-          <span
-            key={word}
-            className="outline-text px-6 font-display text-[clamp(4rem,14vw,12rem)] leading-none font-extrabold tracking-tighter transition-colors duration-500 hover:text-accent"
-          >
-            {word} <span className="text-accent">✦</span>
-          </span>
-        ))}
-      </VelocityMarquee>
+    <footer className="border-t border-hairline bg-canvas px-6 py-10 md:px-10">
+      <div className="mx-auto flex w-full max-w-5xl flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
+        <p className="font-mono text-[0.7rem] text-ink-3">
+          &copy; {year} Rubén Martín Ruiz. {t.footer.rights}
+        </p>
 
-      <div className="mx-auto mt-10 flex max-w-[90rem] flex-wrap items-center justify-between gap-4 px-5 font-mono text-micro uppercase text-ink-3 md:px-10">
-        <span>
-          © {new Date().getFullYear()} Rubén Martín Ruiz. {t.footer.rights}
-        </span>
-        <button type="button" onClick={scrollToTop} className="transition-colors hover:text-accent">
-          ↑ {lang === 'es' ? 'Arriba' : 'Top'}
-        </button>
+        <nav className="flex flex-wrap gap-x-6 gap-y-2" aria-label="Social">
+          {socials.map((s) => (
+            <a
+              key={s.label}
+              href={s.href}
+              target={s.href.startsWith('http') ? '_blank' : undefined}
+              rel={s.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+              className="text-small text-ink-2 transition-colors duration-300 hover:text-ink"
+            >
+              {s.label}
+            </a>
+          ))}
+        </nav>
       </div>
     </footer>
   )

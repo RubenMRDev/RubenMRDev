@@ -6,7 +6,6 @@ export interface Translations {
     skills: string
     projects: string
     experience: string
-    contact: string
   }
   hero: {
     name: string
@@ -50,12 +49,6 @@ export interface Translations {
     present: string
     internship: string
   }
-  contact: {
-    eyebrow: string
-    title: string
-    subtitle: string
-    send: string
-  }
   footer: {
     rights: string
   }
@@ -76,6 +69,8 @@ export interface Project {
 export interface Skill {
   name: string
   icon: string
+  /** Brand colour, lifted where the brand is black so it reads on the dark page. */
+  color: string
   category: 'frontend' | 'backend' | 'tools'
 }
 

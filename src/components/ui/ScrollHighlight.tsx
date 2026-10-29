@@ -4,7 +4,7 @@ import { motion, useScroll, useTransform, type MotionValue } from 'motion/react'
 /** A paragraph that starts dim and lights up word by word as it scrolls past. */
 export default function ScrollHighlight({ text, className }: { text: string; className?: string }) {
   const ref = useRef<HTMLParagraphElement>(null)
-  const { scrollYProgress } = useScroll({ target: ref, offset: ['start 85%', 'end 45%'] })
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start 85%', 'end 50%'] })
   const words = text.split(' ')
 
   return (
@@ -19,9 +19,9 @@ export default function ScrollHighlight({ text, className }: { text: string; cla
 }
 
 function Word({ children, progress, range }: { children: string; progress: MotionValue<number>; range: [number, number] }) {
-  const opacity = useTransform(progress, range, [0.15, 1])
+  const opacity = useTransform(progress, range, [0.18, 1])
   return (
-    <motion.span aria-hidden style={{ opacity }} className="inline-block whitespace-pre motion-reduce:!opacity-100">
+    <motion.span aria-hidden style={{ opacity }} className="motion-reduce:!opacity-100">
       {children}{' '}
     </motion.span>
   )

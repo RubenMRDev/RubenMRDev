@@ -1,11 +1,12 @@
 import { useRef, type ReactNode } from 'react'
 import { motion, useMotionValue, useSpring } from 'motion/react'
 
-/** Pulls its child toward the pointer while hovered, then springs back. */
-export default function Magnetic({ children, strength = 0.35 }: { children: ReactNode; strength?: number }) {
+/** Leans its child toward the mouse while hovered and springs back on leave. */
+export default function Magnetic({ children, strength = 0.3 }: { children: ReactNode; strength?: number }) {
   const ref = useRef<HTMLDivElement>(null)
-  const x = useSpring(useMotionValue(0), { stiffness: 220, damping: 15, mass: 0.4 })
-  const y = useSpring(useMotionValue(0), { stiffness: 220, damping: 15, mass: 0.4 })
+  const spring = { stiffness: 220, damping: 15, mass: 0.4 }
+  const x = useSpring(useMotionValue(0), spring)
+  const y = useSpring(useMotionValue(0), spring)
 
   return (
     <motion.div

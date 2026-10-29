@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
 import { animate, useInView } from 'motion/react'
-import { prefersReducedMotion } from '../../lib/scroll'
 
 interface CounterProps {
   to: number
@@ -13,12 +12,10 @@ interface CounterProps {
 export default function Counter({ to, suffix = '', duration = 1.4, className }: CounterProps) {
   const ref = useRef<HTMLSpanElement>(null)
   const inView = useInView(ref, { once: true, margin: '0px 0px -15% 0px' })
-  // A number ticking upward is exactly the kind of motion the setting means to
-  // refuse, so those visitors start on the final figure and never animate.
-  const [value, setValue] = useState(() => (prefersReducedMotion() ? to : 0))
+  const [value, setValue] = useState(0)
 
   useEffect(() => {
-    if (!inView || prefersReducedMotion()) return
+    if (!inView) return
 
     const controls = animate(0, to, {
       duration,

@@ -6,7 +6,6 @@ export const en: Translations = {
     skills: 'Skills',
     projects: 'Work',
     experience: 'Experience',
-    contact: 'Contact',
   },
   hero: {
     name: 'Rubén Martín Ruiz',
@@ -20,10 +19,10 @@ export const en: Translations = {
   },
   about: {
     eyebrow: 'About',
-    title: 'I care about how things are built.',
-    bio: 'I want a product to be fast, clear, and still easy to maintain once the team grows.',
+    title: 'It started as curiosity. It still is.',
+    bio: 'As a kid I would open a website and wonder how it was made. That curiosity never left: now I am the one building them, and I still enjoy it like on day one.',
     detail:
-      'I am as comfortable on the frontend as on the backend, and I care as much about how an interface feels as about what holds it up. I would rather understand why something works than leave it merely working, and there is almost always a side project running where I try new ideas.',
+      'I am as comfortable on the frontend as on the backend, but what matters most to me is the user experience: that everything makes sense at first glance, responds fast and feels good to use. To me, a well-built interface is one nobody has to stop and think about.',
     yearsExp: 'Years of experience',
     projectsCompleted: 'Projects shipped',
     techStack: 'Technologies',
@@ -51,12 +50,6 @@ export const en: Translations = {
     title: 'Where I have worked.',
     present: 'Current',
     internship: 'Internship',
-  },
-  contact: {
-    eyebrow: 'Contact',
-    title: 'Let us build something.',
-    subtitle: 'Got an idea, a role or a project that needs a fullstack pair of hands? My inbox is open.',
-    send: 'Send me an email',
   },
   footer: {
     rights: 'All rights reserved.',

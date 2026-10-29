@@ -1,59 +1,100 @@
-import { useState } from 'react'
-import { motion, useMotionValueEvent, useScroll } from 'motion/react'
+import { useState, useEffect } from 'react'
 import { useLanguage } from '../../context/LanguageContext'
-import { scrollToSection, scrollToTop } from '../../lib/scroll'
+import { scrollToSection } from '../../lib/scroll'
 import LanguageToggle from '../ui/LanguageToggle'
 
-const links = ['about', 'skills', 'projects', 'experience', 'contact'] as const
+const navItems = ['about', 'skills', 'projects', 'experience'] as const
 
-/** Floating pill that tucks away while scrolling down and returns on the way up. */
+const pill =
+  'rounded-full border border-hairline bg-canvas/70 shadow-[0_8px_32px_-14px_rgba(0,0,0,0.75)] backdrop-blur-2xl backdrop-saturate-150'
+
 export default function Navbar() {
   const { t } = useLanguage()
-  const { scrollY } = useScroll()
+  const [isMobileOpen, setIsMobileOpen] = useState(false)
   const [hidden, setHidden] = useState(false)
 
-  useMotionValueEvent(scrollY, 'change', (y) => {
-    const previous = scrollY.getPrevious() ?? 0
-    setHidden(y > previous && y > 200)
-  })
+  useEffect(() => {
+    let lastY = window.scrollY
+    const handleScroll = () => {
+      const currentY = window.scrollY
+      setHidden(currentY > lastY && currentY > 220)
+      lastY = currentY
+    }
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  const scrollTo = (id: string) => {
+    setIsMobileOpen(false)
+    scrollToSection(id)
+  }
 
   return (
-    <motion.header
-      className="fixed inset-x-0 top-4 z-40 flex justify-center px-4"
-      initial={{ y: -80, opacity: 0 }}
-      animate={{ y: hidden ? -90 : 0, opacity: hidden ? 0 : 1 }}
-      transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: hidden ? 0 : 0.2 }}
-    >
-      <nav className="flex items-center gap-1 rounded-full border border-line bg-canvas/70 p-1.5 pl-4 backdrop-blur-xl">
+    <>
+      {/* A floating pill rather than a full-width bar: it never touches the
+          viewport edges, so the page reads as continuous behind it. The pill
+          carries the sections and nothing else; language sits on its own. */}
+      <nav
+        className={`fixed inset-x-0 top-4 z-50 flex items-center justify-center px-4 transition-transform duration-500 ease-[var(--ease-out-expo)] ${
+          hidden && !isMobileOpen ? '-translate-y-[200%]' : 'translate-y-0'
+        }`}
+      >
+        <div className={`hidden items-center gap-0.5 p-1.5 md:flex ${pill}`}>
+          {navItems.map((item) => (
+            <button
+              key={item}
+              type="button"
+              onClick={() => scrollTo(item)}
+              className="rounded-full px-4 py-1.5 text-small text-ink-2 transition-colors duration-300 hover:bg-canvas-2 hover:text-ink"
+            >
+              {t.nav[item]}
+            </button>
+          ))}
+        </div>
+
         <button
           type="button"
-          onClick={scrollToTop}
-          className="mr-2 font-display text-[0.95rem] font-bold tracking-tight text-ink"
+          onClick={() => setIsMobileOpen(!isMobileOpen)}
+          className={`flex h-11 w-11 flex-col items-center justify-center gap-[5px] md:hidden ${pill}`}
+          aria-label="Toggle menu"
+          aria-expanded={isMobileOpen}
         >
-          rmr<span className="text-accent">.</span>
+          <span
+            className={`block h-px w-4 bg-ink transition-transform duration-500 ease-[var(--ease-out-expo)] ${
+              isMobileOpen ? 'translate-y-[3px] rotate-45' : ''
+            }`}
+          />
+          <span
+            className={`block h-px w-4 bg-ink transition-transform duration-500 ease-[var(--ease-out-expo)] ${
+              isMobileOpen ? '-translate-y-[3px] -rotate-45' : ''
+            }`}
+          />
         </button>
-        <ul className="hidden items-center md:flex">
-          {links.map((id) => (
-            <li key={id}>
-              <button
-                type="button"
-                onClick={() => scrollToSection(id)}
-                className="group relative overflow-hidden rounded-full px-3.5 py-2 text-sm text-ink-2 transition-colors hover:text-ink"
-              >
-                <span className="block transition-transform duration-500 ease-out-expo group-hover:-translate-y-full">
-                  {t.nav[id]}
-                </span>
-                <span className="absolute inset-x-3.5 top-full block text-accent transition-transform duration-500 ease-out-expo group-hover:-translate-y-[calc(100%+0.5rem)]">
-                  {t.nav[id]}
-                </span>
-              </button>
-            </li>
-          ))}
-        </ul>
-        <div className="ml-1 rounded-full border border-line">
+
+        <div className={`absolute right-4 p-1 ${pill}`}>
           <LanguageToggle />
         </div>
       </nav>
-    </motion.header>
+
+      {/* Stays mounted so it can fade out; inert keeps it out of the tab order
+          and the a11y tree while closed. */}
+      <div
+        inert={!isMobileOpen}
+        className={`fixed inset-0 z-40 flex flex-col justify-center gap-1 bg-canvas/95 px-6 backdrop-blur-2xl transition-opacity duration-500 ease-[var(--ease-out-expo)] md:hidden ${
+          isMobileOpen ? 'opacity-100' : 'pointer-events-none opacity-0'
+        }`}
+      >
+        {navItems.map((item) => (
+          <button
+            key={item}
+            type="button"
+            onClick={() => scrollTo(item)}
+            className="border-b border-hairline py-4 text-left text-heading font-medium text-ink"
+          >
+            {t.nav[item]}
+          </button>
+        ))}
+      </div>
+    </>
   )
 }
