@@ -54,4 +54,10 @@ export const es: Translations = {
   footer: {
     rights: 'Todos los derechos reservados.',
   },
+  season: {
+    halloween: '🎃 Feliz Halloween',
+    christmas: '🎄 Feliz Navidad',
+    newyear: '🥂 Feliz Año Nuevo',
+    hide: 'Quitar la decoración',
+  },
 }

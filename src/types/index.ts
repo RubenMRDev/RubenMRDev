@@ -52,6 +52,12 @@ export interface Translations {
   footer: {
     rights: string
   }
+  season: {
+    halloween: string
+    christmas: string
+    newyear: string
+    hide: string
+  }
 }
 
 export interface Project {

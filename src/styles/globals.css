@@ -146,6 +146,22 @@
   }
 }
 
+/* Seasonal themes only swap the accent; everything built on it follows. */
+html[data-season="halloween"] {
+  --color-accent: oklch(0.74 0.17 55);
+  --color-accent-soft: oklch(0.8 0.14 60);
+}
+
+html[data-season="christmas"] {
+  --color-accent: oklch(0.66 0.2 25);
+  --color-accent-soft: oklch(0.8 0.14 150);
+}
+
+html[data-season="newyear"] {
+  --color-accent: oklch(0.83 0.13 85);
+  --color-accent-soft: oklch(0.87 0.1 85);
+}
+
 /* Tabular figures keep counters and meters from reflowing as they tick. */
 @utility nums {
   font-variant-numeric: tabular-nums;

@@ -5,6 +5,7 @@ import Hero from './components/sections/Hero'
 import Footer from './components/layout/Footer'
 import ScrollToTop from './components/layout/ScrollToTop'
 import Cursor from './components/ui/Cursor'
+import SeasonLayer from './components/season/SeasonLayer'
 import { startSmoothScroll } from './lib/scroll'
 
 const About = lazy(() => import('./components/sections/About'))
@@ -39,6 +40,7 @@ export default function App() {
       </main>
       <Footer />
       <ScrollToTop />
+      <SeasonLayer />
       <Cursor />
     </MotionConfig>
   )

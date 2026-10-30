@@ -5,6 +5,7 @@ import { scrollToSection } from '../../lib/scroll'
 import Button from '../ui/Button'
 import Magnetic from '../ui/Magnetic'
 import SplitText from '../ui/SplitText'
+import SeasonBadge from '../season/SeasonBadge'
 
 const EASE = [0.16, 1, 0.3, 1] as const
 
@@ -70,13 +71,14 @@ export default function Hero() {
         <motion.div
           variants={rise}
           transition={{ duration: 0.8, ease: EASE }}
-          className="flex items-center gap-2.5 font-mono text-micro uppercase text-ink-3"
+          className="flex flex-wrap items-center gap-2.5 font-mono text-micro uppercase text-ink-3"
         >
           <span className="relative flex h-1.5 w-1.5">
             <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-70" />
             <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-accent" />
           </span>
           {t.hero.location}
+          <SeasonBadge />
         </motion.div>
 
         <h1 className="mt-8 max-w-[15ch] text-display font-semibold text-ink">
