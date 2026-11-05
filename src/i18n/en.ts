@@ -44,6 +44,8 @@ export const en: Translations = {
     viewCode: 'Source',
     viewDemo: 'Live demo',
     open: 'Open',
+    miniEyebrow: 'Side projects',
+    miniTitle: 'Experiments and weekend builds.',
   },
   experience: {
     eyebrow: 'Experience',

@@ -1,6 +1,6 @@
 import { motion } from 'motion/react'
 import { useLanguage } from '../../context/LanguageContext'
-import { projects } from '../../data/projects'
+import { miniProjects, projects } from '../../data/projects'
 import { skills } from '../../data/skills'
 import SectionHeading from '../ui/SectionHeading'
 import Reveal from '../ui/Reveal'
@@ -14,7 +14,7 @@ export default function About() {
 
   const stats = [
     { to: 1, suffix: '+', label: t.about.yearsExp },
-    { to: projects.length, suffix: '', label: t.about.projectsCompleted },
+    { to: projects.length + miniProjects.length, suffix: '', label: t.about.projectsCompleted },
     { to: skills.length, suffix: '', label: t.about.techStack },
   ]
 

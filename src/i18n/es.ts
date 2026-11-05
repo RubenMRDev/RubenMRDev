@@ -44,6 +44,8 @@ export const es: Translations = {
     viewCode: 'Código',
     viewDemo: 'Ver demo',
     open: 'Abrir',
+    miniEyebrow: 'Mini proyectos',
+    miniTitle: 'Experimentos y proyectos de fin de semana.',
   },
   experience: {
     eyebrow: 'Experiencia',

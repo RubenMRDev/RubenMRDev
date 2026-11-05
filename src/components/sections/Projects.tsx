@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { motion, useScroll, useSpring, useTransform } from 'motion/react'
 import { useLanguage } from '../../context/LanguageContext'
-import { projects } from '../../data/projects'
+import { miniProjects, projects } from '../../data/projects'
 import { useMediaQuery } from '../../lib/media'
 import SectionHeading from '../ui/SectionHeading'
 
@@ -190,6 +190,56 @@ export default function Projects() {
             </div>
           )}
         </div>
+      </div>
+
+      <div className="px-6 pb-24 md:px-10 md:pb-32">
+        <SectionHeading eyebrow={t.projects.miniEyebrow} title={t.projects.miniTitle} onDeep />
+
+        <ul className="mt-10 border-t border-deep-line">
+          {miniProjects.map((mini, i) => (
+            <motion.li
+              key={mini.id}
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '0px 0px -10% 0px' }}
+              transition={{ duration: 0.6, delay: i * 0.05, ease: EASE }}
+              className="grid gap-x-8 gap-y-2 border-b border-deep-line py-6 md:grid-cols-[3rem_minmax(12rem,1fr)_2fr_auto] md:items-baseline"
+            >
+              <span className="nums font-mono text-micro text-deep-ink-2/70">
+                {String(i + 1).padStart(2, '0')}
+              </span>
+              <h3 className="font-semibold text-deep-ink">{mini.title}</h3>
+              <div>
+                <p className="text-small text-deep-ink-2">{mini.description[lang]}</p>
+                <p className="mt-1.5 font-mono text-[0.68rem] text-deep-ink-2/70">
+                  {mini.tags.join(' · ')}
+                </p>
+              </div>
+              <div className="flex gap-x-5">
+                {mini.demo && (
+                  <a
+                    href={mini.demo}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-small font-medium text-deep-ink transition-colors hover:text-accent-soft"
+                  >
+                    {t.projects.viewDemo} <span aria-hidden="true">↗</span>
+                  </a>
+                )}
+                {mini.github && (
+                  <a
+                    href={mini.github}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-small text-deep-ink-2 transition-colors hover:text-deep-ink"
+                  >
+                    {t.projects.viewCode}
+                  </a>
+                )}
+              </div>
+            </motion.li>
+          ))}
+        </ul>
       </div>
     </section>
   )

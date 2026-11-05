@@ -42,6 +42,8 @@ export interface Translations {
     viewCode: string
     viewDemo: string
     open: string
+    miniEyebrow: string
+    miniTitle: string
   }
   experience: {
     eyebrow: string
@@ -68,6 +70,15 @@ export interface Project {
   tags: string[]
   category: 'frontend' | 'fullstack' | 'other'
   difficulty: number
+  github?: string
+  demo?: string
+}
+
+export interface MiniProject {
+  id: string
+  title: string
+  description: { en: string; es: string }
+  tags: string[]
   github?: string
   demo?: string
 }
