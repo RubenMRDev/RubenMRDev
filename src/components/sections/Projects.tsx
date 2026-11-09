@@ -57,6 +57,7 @@ export default function Projects() {
   const categoryLabel: Record<string, string> = {
     frontend: t.projects.frontend,
     fullstack: t.projects.fullstack,
+    desktop: t.projects.desktop,
     other: lang === 'en' ? 'Other' : 'Otro',
   }
 

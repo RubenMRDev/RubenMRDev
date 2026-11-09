@@ -41,6 +41,7 @@ export const es: Translations = {
     count: 'proyectos',
     frontend: 'Frontend',
     fullstack: 'Fullstack',
+    desktop: 'Escritorio',
     viewCode: 'Código',
     viewDemo: 'Ver demo',
     open: 'Abrir',

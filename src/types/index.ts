@@ -39,6 +39,7 @@ export interface Translations {
     count: string
     frontend: string
     fullstack: string
+    desktop: string
     viewCode: string
     viewDemo: string
     open: string
@@ -68,7 +69,7 @@ export interface Project {
   description: { en: string; es: string }
   image: string
   tags: string[]
-  category: 'frontend' | 'fullstack' | 'other'
+  category: 'frontend' | 'fullstack' | 'desktop' | 'other'
   difficulty: number
   github?: string
   demo?: string

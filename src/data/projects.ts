@@ -37,6 +37,22 @@ import type { MiniProject, Project } from '../types'
 
 export const projects: Project[] = [
   {
+    id: 'taskvia',
+    title: {
+      en: 'Taskvia',
+      es: 'Taskvia',
+    },
+    description: {
+      en: 'Desktop app for kanban boards and block-based markdown docs, 100% local, with an MCP server so your AI assistant creates, moves and documents tasks while it works.',
+      es: 'App de escritorio con tableros kanban y documentación por bloques en markdown, 100% en local, con servidor MCP para que tu asistente de IA cree, mueva y documente tareas mientras trabaja.',
+    },
+    image: '/taskvia.webp',
+    tags: ['Electron', 'JavaScript', 'MCP', 'Markdown'],
+    category: 'desktop',
+    difficulty: 4,
+    github: 'https://github.com/RubenMRDev/taskvia',
+  },
+  {
     id: 'project-1',
     title: {
       en: 'Chordia',
