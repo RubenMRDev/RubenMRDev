@@ -53,6 +53,22 @@ export const projects: Project[] = [
     github: 'https://github.com/RubenMRDev/taskvia',
   },
   {
+    id: 'notch-pet',
+    title: {
+      en: 'Notch Pet',
+      es: 'Notch Pet',
+    },
+    description: {
+      en: 'A pet living on the edge of your screen that watches your Claude Code sessions: it shows what each one is doing, alerts you when one needs you, and lets you approve, answer or message it without switching windows. In 10 languages.',
+      es: 'Una mascota en el borde de la pantalla que vigila tus sesiones de Claude Code: te dice qué hace cada una, te avisa cuando una te necesita y te deja aprobar, contestar o escribirle sin cambiar de ventana. En 10 idiomas.',
+    },
+    image: '/notch-pet.webp',
+    tags: ['Electron', 'JavaScript', 'Claude Code hooks'],
+    category: 'desktop',
+    difficulty: 4,
+    github: 'https://github.com/RubenMRDev/notch-pet',
+  },
+  {
     id: 'project-1',
     title: {
       en: 'Chordia',
